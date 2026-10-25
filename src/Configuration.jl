@@ -9,6 +9,8 @@ const CONFIG_KEYS = Dict(
     "convection" => ["enabled", "r_min_m", "r_max_m", "vortex_radius_m", "q_max_s", "bias_max", "psi_limit_m2_s", "interval_min_s", "interval_max_s"],
     "output" => ["diagnostic_interval_s", "snapshot_interval_s", "checkpoint_interval_s", "m_max", "ntheta", "nr", "jet_search_halfwidth_m"])
 
+const OPTIONAL_PHYSICS_KEYS = ["deep_profile", "deep_match_fraction"]
+
 function load_config(path)
     c = TOML.parsefile(path)
     validate_config(c)
@@ -20,8 +22,11 @@ function validate_config(c)
     for (section, allowed) in CONFIG_KEYS
         v = c[section]
         v isa AbstractDict || error("$section must be a table")
-        Set(keys(v)) == Set(allowed) || error("Keys in [$section] must be exactly $allowed; unknown/missing fields are rejected")
+        optional = section == "physics" ? OPTIONAL_PHYSICS_KEYS : String[]
+        all(k -> haskey(v, k), allowed) && all(k -> k in allowed || k in optional, keys(v)) ||
+            error("Keys in [$section] must include $allowed; only $optional are optional; unknown/missing fields are rejected")
         for (k, x) in v
+            x isa Bool && !(section == "convection" && k == "enabled") && error("$section.$k must not be Boolean")
             if x isa Real && !(x isa Bool)
                 (isfinite(x) || (section == "physics" && k == "deformation_radius_m" && x == Inf) ||
                  (section == "numerics" && k == "cutoff_damping_time_s" && x == Inf)) || error("$section.$k must be finite")
@@ -33,6 +38,18 @@ function validate_config(c)
     n = c["grid"]["nx"]; n isa Integer && n >= 32 && iseven(n) || error("grid.nx must be an even integer >= 32")
     positive("planet", ["radius_m", "rotation_rate_s"])
     positive("physics", ["deformation_radius_m", "deep_jet_radius_m", "deep_jet_width_m"])
+    d = c["physics"]
+    profile = get(d, "deep_profile", "annular")
+    profile in ("annular", "matched_upper") || error("physics.deep_profile must be annular or matched_upper")
+    d["deep_jet_speed_m_s"] isa Real || error("physics.deep_jet_speed_m_s must be real")
+    if profile == "matched_upper"
+        d["deep_jet_speed_m_s"] == 0 || error("matched_upper requires deep_jet_speed_m_s=0; the annular deep jet is not added")
+        alpha = get(d, "deep_match_fraction", 1.0)
+        alpha isa Real && !(alpha isa Bool) && isfinite(alpha) && alpha >= 0 ||
+            error("physics.deep_match_fraction must be a finite nonnegative real")
+    else
+        !haskey(d, "deep_match_fraction") || error("deep_match_fraction is only valid for deep_profile=matched_upper")
+    end
     positive("initial", ["jet_radius_m", "jet_width_m", "cyclone_radius_m"])
     c["initial"]["displacement_m"] >= 0 || error("initial displacement must be nonnegative")
     c["initial"]["perturbation"] in ("none", "mode", "broadband") || error("initial.perturbation must be none, mode, or broadband")

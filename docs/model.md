@@ -52,7 +52,7 @@ The spectral inversion is
 =-\frac{\widehat s(\boldsymbol k)}{|\boldsymbol k|^2+\kappa^2}.
 \]
 
-For `deformation_radius_m = inf`, `kappa² = 0` and the zero streamfunction mode is set by the barotropic inversion convention. This recovers barotropic vorticity dynamics. A finite deformation radius with zero prescribed deep speed remains a 1.5-layer model with a resting deep layer.
+For `deformation_radius_m = inf`, `kappa² = 0` and the zero streamfunction mode is set by the barotropic inversion convention. This recovers barotropic vorticity dynamics. A finite deformation radius with a zero prescribed deep profile remains a 1.5-layer model with a resting deep layer. For `matched_upper`, zero `deep_jet_speed_m_s` alone does not imply a resting deep layer; its amplitude is set by `deep_match_fraction`.
 
 ## Periodic outer continuation
 
@@ -99,7 +99,7 @@ Before windowing and zero-mean adjustment, the annular jet uses
 u_{\theta,j}(r)=U\frac rR\operatorname{sech}^2\left(\frac{r^2-R^2}{2Rw}\right).
 \]
 
-This is regular at the origin and has speed `U` at `r=R`. Its actual peak is slightly displaced from `R`; `w` is a profile parameter rather than a measured full width at half maximum. Fit and compare the realized profile. The deep jet uses the same family with independent parameters.
+This is regular at the origin and has speed `U` at `r=R`. Its actual peak is slightly displaced from `R`; `w` is a profile parameter rather than a measured full width at half maximum. Fit and compare the realized profile. The default deep profile (`physics.deep_profile = "annular"`, also used when omitted) uses the same ring family with independent parameters.
 
 The central cyclone uses
 
@@ -108,6 +108,32 @@ The central cyclone uses
 \]
 
 Before windowing, its tangential speed has maximum `U_c` at `r=R_c`. A single-mode or broadband perturbation is added through a streamfunction disturbance localized around the jet. Each mode has a smooth polar envelope proportional to `(r/R)^m exp[-m((r/R)²-1)/2]`. This removes the coordinate singularity of `cos(m theta)` at the origin.
+
+With `physics.deep_profile = "matched_upper"`, the deep streamfunction is
+`deep_match_fraction` times the unperturbed **jet plus cyclone**, with the same
+taper and mean reference. The fraction defaults to one, must be nonnegative,
+and is written explicitly in the stabilization campaign. The independent
+`deep_jet_speed_m_s` must be zero in this mode to prevent silently ignoring a
+second prescribed flow. Its radius and width remain positive configuration
+placeholders. No azimuthal perturbation is imposed in the lower layer.
+
+Changing the match fraction or deformation radius leaves the initial upper
+streamfunction and winds fixed; the initial PV is recalculated. At fraction
+one, the axisymmetric stretching term cancels: `psi_base = psi_deep`. On the
+stored grid the matching branch applies the same projection passes as the
+upper PV initializer, avoiding a cutoff-edge mismatch in the pinned FFT
+library. The legacy annular branch retains its previous projection behavior.
+This matching removes the *base-state* interface anomaly but neither its
+perturbations nor the upper flow's Rossby number. It does not establish
+stability or small-amplitude QG validity.
+
+New diagnostic columns measure the evolved state inside `inner_radius_m`:
+`max_abs_hprime_over_H`, `min_h_over_H`, and `max_abs_zeta_over_f`.
+The first two use `hprime/H = (psi-psi_deep)/(2*Omega*LD^2)` in the model's
+zero-domain-mean convention; they are NaN in the barotropic limit.
+The last uses local `f=2*Omega-gamma*r^2/2` and
+`zeta=s+psi/LD^2`. These are regime indicators, not automatic acceptance
+criteria; inspect them alongside numerical convergence and the actual fields.
 
 `displacement_m` sets the intended small-displacement scale near the jet, not an exactly prescribed nonlinear contour. A single mode has fixed initial phase; broadband phases use the experiment seed. For `N` broadband modes, each nominal component amplitude is `displacement_m/sqrt(N)`, making the root-sum-square amplitude fixed and the angular RMS approximately `displacement_m/sqrt(2)`. Measure the realized centreline after projection. Use displacements small relative to the jet width for linear selection experiments, and independently check that all initialized azimuthal wavelengths are resolved.
 

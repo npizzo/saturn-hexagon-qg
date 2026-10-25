@@ -1,0 +1,47 @@
+campaign = "unforced_whole_profile_stabilization"
+candidates = []
+convection = "off in every case; no convection-maintenance claim"
+deep_flow = "psi_d=alpha times the unperturbed upper annulus plus cyclone, with the same taper and zero-mean gauge; no deep hexagon"
+manifest_sha256 = "d55feb3c66021f9ec2322d58d01188fe88009d329b0be0fd45123e50526a5838"
+pilot_sha256 = "97070dc16e5d89ad53d48b1fcadca6f735bfc7695596ac86d3a6c6dcde68a038"
+schema_version = 1
+source_sha256 = "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc"
+
+[frame]
+positive_theta = "eastward assumption; register to goflow convention"
+reference_angular_speed_in_model_s = -1.217614124137122e-6
+reference_period_s = 38363.01
+rotation_rate_s = 0.000165
+
+[interpretation]
+duration = "growth screens and candidate persistence; quiet is not stable"
+numerics = "both fixed physical hyperviscosity and fixed cutoff damping refinements included"
+phase = "measure only on a connected coherent jet and cross-check field modes; retain ambient PV and frame"
+regime = "continuum initial thickness bounds in physics-audit.tsv; actual projected/evolved thickness and vorticity/f in diagnostics.csv; no certification of QG validity"
+small_LD = "weak modes and critical layers require radial and 2D mesh/domain refinement"
+
+[published_states]
+pizzo_salmon_2024 = "reconstruction_required: ambient PV, rotation rate, global matching and physical scaling"
+rostami_zeitlin_spiga_2017 = "reconstruction_required: balanced QG counterpart of the RSW state"
+
+[[stages]]
+count = 3
+name = "validation"
+[[stages]]
+count = 5
+name = "controls"
+[[stages]]
+count = 9
+name = "screen"
+[[stages]]
+count = 4
+name = "transition"
+[[stages]]
+count = 6
+name = "width"
+[[stages]]
+count = 10
+name = "numerics"
+[[stages]]
+count = 2
+name = "boundary"

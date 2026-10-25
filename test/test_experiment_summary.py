@@ -186,6 +186,61 @@ m_max = 32
         self.assertEqual(result["input_status"], "invalid_or_missing_input")
         self.assertEqual(result["modes"], [])
 
+    def test_optional_regime_extrema_preserve_missing_and_nonfinite_status(self):
+        finite_ld = {"physics": {"deformation_radius_m": 2e6}}
+        columns = {"max_abs_hprime_over_H": np.array([0.1, 0.3, 0.2]),
+                   "min_h_over_H": np.array([0.9, 0.7, 0.8]),
+                   "max_abs_zeta_over_f": np.array([0.2, np.nan, 0.5])}
+        result = summary.regime_summary(columns, finite_ld)
+        self.assertEqual(result["maximum_abs_hprime_over_H"], 0.3)
+        self.assertEqual(result["minimum_h_over_H"], 0.7)
+        self.assertEqual(result["maximum_abs_zeta_over_f"], 0.5)
+        self.assertEqual(result["columns"]["max_abs_zeta_over_f"]["status"], "partly_nonfinite")
+        self.assertEqual(result["columns"]["max_abs_zeta_over_f"]["finite_samples"], 2)
+        old = summary.regime_summary({}, finite_ld)
+        self.assertIsNone(old["maximum_abs_hprime_over_H"])
+        self.assertEqual(old["columns"]["max_abs_hprime_over_H"]["status"], "absent_legacy_or_unrecorded_column")
+
+    def test_barotropic_thickness_is_undefined_not_zero(self):
+        columns = {"max_abs_hprime_over_H": np.array([np.nan, np.nan]),
+                   "min_h_over_H": np.array([np.nan, np.nan]),
+                   "max_abs_zeta_over_f": np.array([0.2, 0.4])}
+        result = summary.regime_summary(columns, {"physics": {"deformation_radius_m": math.inf}})
+        self.assertIsNone(result["maximum_abs_hprime_over_H"])
+        self.assertIsNone(result["minimum_h_over_H"])
+        self.assertEqual(result["columns"]["min_h_over_H"]["status"], "not_applicable_barotropic")
+        self.assertEqual(result["maximum_abs_zeta_over_f"], 0.4)
+        invalid = summary.regime_summary(columns, {"physics": {"deformation_radius_m": 2e6}})
+        self.assertEqual(invalid["columns"]["min_h_over_H"]["status"], "no_finite_samples")
+        columns["min_h_over_H"][:] = 1
+        unexpected = summary.regime_summary(columns, {"physics": {"deformation_radius_m": math.inf}})
+        self.assertEqual(unexpected["columns"]["min_h_over_H"]["status"], "unexpected_finite_barotropic_depth_values")
+        self.assertIsNone(unexpected["minimum_h_over_H"])
+
+    def test_regime_columns_are_optional_and_exported_per_run(self):
+        path = self.write_run()
+        old = summary.summarize_run(path, self.options)
+        self.assertEqual(old["regime_summary"]["columns"]["max_abs_zeta_over_f"]["status"],
+                         "absent_legacy_or_unrecorded_column")
+        csvpath = path / "diagnostics.csv"
+        with csvpath.open(newline="") as stream:
+            rows = list(csv.reader(stream))
+        rows[0].extend(["max_abs_hprime_over_H", "min_h_over_H", "max_abs_zeta_over_f"])
+        for row in rows[1:]:
+            row.extend(["nan", "nan", "0.27"])
+        with csvpath.open("w", newline="") as stream:
+            csv.writer(stream).writerows(rows)
+        with (path / "config.toml").open("a") as stream:
+            stream.write("\n[physics]\ndeformation_radius_m = inf\n")
+        output = self.root / "regime_output"
+        with contextlib.redirect_stdout(io.StringIO()):
+            summary.main([str(path), "--output", str(output)])
+        result = json.loads((output / "summary.json").read_text(), parse_constant=lambda s: self.fail(s))
+        regime = result["runs"][0]["regime_summary"]
+        self.assertEqual(regime["columns"]["min_h_over_H"]["status"], "not_applicable_barotropic")
+        self.assertEqual(regime["maximum_abs_zeta_over_f"], 0.27)
+        self.assertIn("max |zeta/f|=0.27", (output / "report.txt").read_text())
+
 
 if __name__ == "__main__":
     unittest.main()

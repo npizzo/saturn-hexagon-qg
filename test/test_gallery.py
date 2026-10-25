@@ -65,6 +65,16 @@ class GalleryTests(unittest.TestCase):
         np.testing.assert_array_equal(gallery.vorticity(self.fields,math.inf),self.fields["s"])
         with self.assertRaises(ValueError):gallery.vorticity(self.fields,0)
 
+    def test_whole_deep_profile_is_retained_and_labelled(self):
+        self.config["physics"].update(deep_profile="matched_upper", deep_match_fraction=.5, deep_jet_speed_m_s=0)
+        public = gallery.safe_config(self.config)
+        self.assertEqual(public["physics"]["deep_match_fraction"], .5)
+        self.assertIn("jet + cyclone", gallery.deep_flow_label(public["physics"]))
+        self.assertIn("0.5", gallery.deep_flow_label(public["physics"]))
+        self.assertEqual(gallery.deep_flow_label({"deep_jet_speed_m_s":50}), "Annular jet 50 m/s")
+        self.config["physics"]["deep_profile"] = "/private/path"
+        with self.assertRaises(ValueError):gallery.safe_config(self.config)
+
     def test_hdf5_and_display_orientation(self):
         time,fields=gallery.read_snapshot(self.result/"snapshot_000000000.jld2",(8,8))
         np.testing.assert_array_equal(fields["psi"],self.fields["psi"])

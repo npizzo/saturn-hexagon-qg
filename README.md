@@ -45,8 +45,13 @@ integration check, not a Saturn experiment. See [Unity](docs/unity.md) or
 [DeltaAI](docs/deltaai.md) for GPU deployment; independent parameter choices
 can run as an array of single-GPU jobs.
 
-The solver, restart format and pinned dependencies are unchanged from the
-validated Unity implementation. Saved outputs record the configuration, source
+The new [Unity stabilization campaign](docs/unity-stabilization.md) adds a
+prescribed deep profile that can match the entire axisymmetric upper flow,
+including its central cyclone. It provides 39 staged unforced tests and a
+new CPU/GPU preflight. Keep it in a separate checkout from previous runs:
+source hashes have changed, so old checkpoints cannot resume with this code.
+The pinned dependencies and checkpoint schema remain unchanged.
+Saved outputs record the configuration, source
 and dependency hashes, actual field times, diagnostics, convective events and
 checkpoint state. A completed job is not a scientific validation certificate.
 
@@ -63,6 +68,8 @@ checkpoints, runtime caches and cluster credentials are excluded.
 - [Equations, frame, boundary treatment and QG limits](docs/model.md)
 - [Convective forcing](docs/convection.md)
 - [Lower-layer experiments and phase-speed requirements](docs/experiment-design.md)
+- [Whole-profile stabilization strategy](docs/stabilization-strategy.md)
+- [Published-state reconstruction requirements](docs/published-state-readiness.md)
 - [Observation comparison and goflow interface](docs/observations.md)
 - [Literature context](docs/literature.md)
 - [Historical initializer audit](docs/legacy-ic-audit.md)

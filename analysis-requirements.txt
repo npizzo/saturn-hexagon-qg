@@ -1,0 +1,4 @@
+# CPU linear spectra and CSV analysis; exact runtime versions are saved in metadata.
+numpy>=1.18
+scipy>=1.4
+toml>=0.10; python_version < "3.11"

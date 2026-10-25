@@ -35,7 +35,7 @@ SCHEMA = {
     "experiment": {"name", "purpose", "seed"},
     "grid": {"nx", "length_m"},
     "planet": {"radius_m", "rotation_rate_s"},
-    "physics": {"deformation_radius_m", "deep_jet_speed_m_s", "deep_jet_radius_m", "deep_jet_width_m"},
+    "physics": {"deformation_radius_m", "deep_jet_speed_m_s", "deep_jet_radius_m", "deep_jet_width_m", "deep_profile", "deep_match_fraction"},
     "initial": {"jet_speed_m_s", "jet_radius_m", "jet_width_m", "cyclone_speed_m_s", "cyclone_radius_m", "perturbation", "displacement_m", "mode", "m_max"},
     "boundary": {"inner_radius_m", "outer_radius_m", "sponge_rate_s"},
     "numerics": {"dt_s", "duration_s", "hyper_order", "cutoff_damping_time_s", "cfl_limit"},
@@ -73,6 +73,9 @@ def safe_config(config):
             value = config[section][key]
             if key == "name":
                 value = public_name(value, "unnamed-run")
+            elif key == "deep_profile":
+                if value not in {"annular", "matched_upper"}:
+                    raise ValueError("Unknown deep-flow profile")
             elif key in ("purpose", "perturbation"):
                 if value not in {"maintenance", "selection", "emergence", "validation", "screen", "benchmark", "none", "mode", "broadband"}:
                     continue
@@ -330,6 +333,12 @@ def format_number(value, unit=""):
     return ("∞" if math.isinf(float(value)) else format(float(value), ".5g")) + (" " + unit if unit else "")
 
 
+def deep_flow_label(physics):
+    if physics.get("deep_profile", "annular") == "matched_upper":
+        return "Whole upper base × " + format_number(physics.get("deep_match_fraction", 1.0)) + " (jet + cyclone)"
+    return "Annular jet " + format_number(physics["deep_jet_speed_m_s"], "m/s")
+
+
 def metadata_rows(run):
     c = run["public_config"]
     p, initial, numerical = c["physics"], c["initial"], c["numerics"]
@@ -345,7 +354,8 @@ def metadata_rows(run):
     return [
         ("Convection", "On" if c["convection"]["enabled"] else "Off"),
         ("Deformation radius", format_number(p["deformation_radius_m"]/1e6,"Mm")),
-        ("Upper / deep annular jet", "%s / %s m s⁻¹" % (format_number(initial["jet_speed_m_s"]), format_number(p["deep_jet_speed_m_s"]))),
+        ("Upper annular jet", format_number(initial["jet_speed_m_s"], "m/s")),
+        ("Prescribed deep flow", deep_flow_label(p)),
         ("Jet radius / width", "%s / %s Mm" % (format_number(initial["jet_radius_m"]/1e6), format_number(initial["jet_width_m"]/1e6))),
         ("Initial disturbance", disturbance),
         ("Initial azimuthal mode(s)", str(initial["mode"]) if initial["perturbation"] == "mode" else "1–%s" % initial["m_max"] if initial["perturbation"] == "broadband" else "None"),
@@ -465,7 +475,7 @@ def build_gallery(paths, output, title="Saturn polar QG experiments", descriptio
         prefix="runs/"+run["slug"]+"/"
         forced=run["config"]["convection"]["enabled"]
         tag='Convection on' if forced else 'Convection off'
-        cards.append('<article class="card"><a href="'+prefix+'index.html"><img src="'+prefix+frames[-1]["image"]+'" alt="Final vorticity and speed for '+html.escape(run["name"],quote=True)+'" loading="lazy"></a><div class="card-body"><h2>'+html.escape(run["name"])+ '</h2><div class="tags"><span class="tag'+('' if forced else ' off')+'">'+tag+'</span><span class="tag">'+str(run["config"]["grid"]["nx"])+ '² grid</span><span class="tag">'+str(len(frames))+' saved frames</span></div><p>LD '+format_number(run["ld"]/1e6,'Mm')+' · Deep jet '+format_number(run["config"]["physics"]["deep_jet_speed_m_s"],'m/s')+' · '+format_number(summary["end_s"]/86400,'model days')+'</p><a class="button" href="'+prefix+'index.html">Explore this run →</a></div></article>')
+        cards.append('<article class="card"><a href="'+prefix+'index.html"><img src="'+prefix+frames[-1]["image"]+'" alt="Final vorticity and speed for '+html.escape(run["name"],quote=True)+'" loading="lazy"></a><div class="card-body"><h2>'+html.escape(run["name"])+ '</h2><div class="tags"><span class="tag'+('' if forced else ' off')+'">'+tag+'</span><span class="tag">'+str(run["config"]["grid"]["nx"])+ '² grid</span><span class="tag">'+str(len(frames))+' saved frames</span></div><p>LD '+format_number(run["ld"]/1e6,'Mm')+' · '+html.escape(deep_flow_label(run["config"]["physics"]))+' · '+format_number(summary["end_s"]/86400,'model days')+'</p><a class="button" href="'+prefix+'index.html">Explore this run →</a></div></article>')
         summaries.append({"name":run["name"],"run_id":run["slug"],"page":prefix+"index.html","summary":prefix+"summary.json","source_sha256":summary["source_sha256"],"input_config_sha256":summary["input_config_sha256"],"snapshot_count":len(frames),"end_s":summary["end_s"]})
     notice='These are exploratory simulations, not established Saturn hexagons. Read the initial condition and configuration differences before comparing runs.'
     if all(r["config"]["initial"]["perturbation"] == "mode" and r["config"]["initial"]["mode"] == 6 for r in runs):

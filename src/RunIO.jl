@@ -51,14 +51,38 @@ function restore_checkpoint!(sim, path)
     return sim
 end
 
+"Physical regime indicators inside the untapered science disk."
+function physical_diagnostics(sim, f=fields(sim))
+    c = sim.config
+    ld = c["physics"]["deformation_radius_m"]
+    kap2 = isinf(ld) ? 0.0 : inv(ld^2)
+    f0 = 2c["planet"]["rotation_rate_s"]
+    gamma = f0/c["planet"]["radius_m"]^2
+    r2 = [xx^2+yy^2 for xx in sim.x, yy in sim.y]
+    disk = r2 .<= c["boundary"]["inner_radius_m"]^2
+    # s is Helmholtz PV, not relative vorticity. The constant f0 omitted
+    # from prognostic PV still belongs in this local Coriolis denominator.
+    zeta = f.s .+ kap2 .* f.psi
+    local_f = f0 .- gamma/2 .* r2
+    maxro = maximum(abs.(zeta[disk] ./ local_f[disk]))
+    if isinf(ld)
+        return (; max_abs_hprime_over_H=NaN, min_h_over_H=NaN, max_abs_zeta_over_f=maxro)
+    end
+    chi = kap2/f0 .* (f.psi[disk] .- sim.psid[disk])
+    return (; max_abs_hprime_over_H=maximum(abs, chi), min_h_over_H=1+minimum(chi), max_abs_zeta_over_f=maxro)
+end
+
 function diagnostics(sim)
     f = fields(sim); c = sim.config; o = c["output"]
     pol = polar_diagnostics(f.u, f.v, f.totalpv, f.psi, f.s, sim.x, sim.y;
         jet_radius_m=c["initial"]["jet_radius_m"], jet_halfwidth_m=o["jet_search_halfwidth_m"],
         m_max=o["m_max"], ntheta=o["ntheta"], nr=o["nr"])
     inv = invariants(sim)
+    physical = physical_diagnostics(sim, f)
     header = ["time_s", "step", "energy_m2_s2", "total_pv_enstrophy_s2", "mean_s_s", "mean_jet_radius_m", "mean_peak_speed_m_s", "jet_coverage"]
     vals = Any[sim.prob.clock.t, sim.prob.clock.step, inv.energy, inv.total_enstrophy, inv.mean_s, pol.meanjet, pol.mean_peak_speed, pol.coverage]
+    append!(header, string.(collect(keys(physical))))
+    append!(vals, collect(values(physical)))
     for m in 1:o["m_max"]
         append!(header, ["m$(m)_amplitude_m", "m$(m)_real_m", "m$(m)_imag_m"])
         z = pol.mode_coefficients[m]
@@ -122,6 +146,8 @@ function run_experiment(config_path; output, device="cpu", resume=nothing)
         "axes"=>"arrays indexed [x,y]; x=r*cos(theta), y=r*sin(theta); u_theta=-u*sin(theta)+v*cos(theta)",
         "units"=>"SI; planar distance in m; time s; velocity m/s; psi m2/s; s and totalpv 1/s",
         "pv_definition"=>"s=(Laplacian-LD^-2)*psi; totalpv=s+B; B=LD^-2*psid+continued gamma-plane PV",
+        "deep_profile"=>get(c["physics"], "deep_profile", "annular"),
+        "physical_diagnostics"=>"r<=boundary.inner_radius_m; hprime/H=(psi-psid)/(2*rotation_rate_s*LD^2), undefined at infinite LD; h/H=1+hprime/H; zeta=s+psi/LD^2; f(r)=2*rotation_rate_s-(2*rotation_rate_s/radius_m^2)*r^2/2",
         "resume_from"=>resume === nothing ? "" : abspath(resume), "hyperviscosity"=>sim.nu)
     open(joinpath(output, "metadata.toml"), "w") do io; TOML.print(io, metadata); end
     jldsave(joinpath(output, "domain.jld2"); x=sim.x, y=sim.y, background_pv=sim.background, psi_deep=sim.psid, reference_s=sim.reference_s)

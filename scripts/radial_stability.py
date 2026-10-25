@@ -6,7 +6,8 @@ For exp[i*m*(theta-c*t)], solve
     L_m = d_rr + d_r/r - m**2/r**2 - Ld**-2.
 The growth rate is m*Im(c), and Re(c) is angular pattern speed. The upper
 base is the configured analytic ring plus cyclone; the prescribed deep flow
-is the analytic ring. Tapers, convection, sponge and hyperviscosity are absent
+is an annular jet or a fraction of the full circular upper flow, including
+the core cyclone. Tapers, convection, sponge and hyperviscosity are absent
 from this linear screen. The circular Dirichlet outer boundary is artificial
 and differs from the evolution model's periodic continuation.
 
@@ -54,7 +55,7 @@ def cyclone_profile(r, speed, radius):
             factor * (r**3 * inverse_r2**2 - 3.0 * r * inverse_r2))
 
 
-def circular_base(config, r, deformation_radius, deep_speed):
+def circular_base(config, r, deformation_radius, deep_speed=None, match_fraction=None):
     """Analytic base, including a cancellation-free q_r/r at the pole."""
     a, d = config["initial"], config["physics"]
     r = np.asarray(r, dtype=float)
@@ -62,10 +63,31 @@ def circular_base(config, r, deformation_radius, deep_speed):
         raise ValueError("r must contain finite nonnegative radii")
     if not (deformation_radius > 0):
         raise ValueError("deformation radius must be positive or inf")
+    profile = d.get("deep_profile", "annular")
+    if profile not in ("annular", "matched_upper"):
+        raise ValueError("deep_profile must be annular or matched_upper")
+    configured_fraction = d.get("deep_match_fraction", 1.0)
+    if isinstance(configured_fraction, bool) or not np.isfinite(configured_fraction) or configured_fraction < 0:
+        raise ValueError("deep_match_fraction must be finite and nonnegative")
+    if profile == "matched_upper":
+        if d.get("deep_jet_speed_m_s", 0.0) != 0:
+            raise ValueError("matched_upper requires deep_jet_speed_m_s=0; use deep_match_fraction")
+        if deep_speed is not None:
+            raise ValueError("deep_speed cannot override matched_upper; use match_fraction")
+        fraction = configured_fraction if match_fraction is None else match_fraction
+        if isinstance(fraction, bool) or fraction is None or not np.isfinite(fraction) or fraction < 0:
+            raise ValueError("matched_upper requires a finite nonnegative deep_match_fraction")
+    else:
+        if "deep_match_fraction" in d:
+            raise ValueError("deep_match_fraction applies only to matched_upper")
+        if match_fraction is not None:
+            raise ValueError("match_fraction applies only to matched_upper")
+        deep_speed = d["deep_jet_speed_m_s"] if deep_speed is None else deep_speed
+        if not np.isfinite(deep_speed):
+            raise ValueError("deep speed must be finite")
     f = 0.0 if math.isinf(deformation_radius) else deformation_radius**-2
     u, up, upp = ring_profile(r, a["jet_speed_m_s"], a["jet_radius_m"], a["jet_width_m"])
     uc, ucp, ucpp = cyclone_profile(r, a["cyclone_speed_m_s"], a["cyclone_radius_m"])
-    ud, _, _ = ring_profile(r, deep_speed, d["deep_jet_radius_m"], d["deep_jet_width_m"])
     rj, wj = a["jet_radius_m"], a["jet_width_m"]
     alpha = 1.0 / (rj * wj)
     t = np.tanh((r * r - rj * rj) * alpha / 2.0)
@@ -77,10 +99,14 @@ def circular_base(config, r, deformation_radius, deep_speed):
     rc = a["cyclone_radius_m"]
     omega_cyclone = (a["cyclone_speed_m_s"] / rc) * np.exp(0.5 - r * r / (2.0 * rc**2))
     vort_grad_over_r += omega_cyclone * (r * r / rc**4 - 4.0 / rc**2)
-    td = np.tanh((r * r - d["deep_jet_radius_m"]**2)
-                 / (2.0 * d["deep_jet_radius_m"] * d["deep_jet_width_m"]))
-    omega_deep = (deep_speed / d["deep_jet_radius_m"]) * (1.0 - td * td)
     omega = omega_ring + omega_cyclone
+    if profile == "matched_upper":
+        ud, omega_deep = fraction * (u + uc), fraction * omega
+    else:
+        ud, _, _ = ring_profile(r, deep_speed, d["deep_jet_radius_m"], d["deep_jet_width_m"])
+        td = np.tanh((r * r - d["deep_jet_radius_m"]**2)
+                     / (2.0 * d["deep_jet_radius_m"] * d["deep_jet_width_m"]))
+        omega_deep = (deep_speed / d["deep_jet_radius_m"]) * (1.0 - td * td)
     gamma = 2.0 * config["planet"]["rotation_rate_s"] / config["planet"]["radius_m"]**2
     qr_over_r = vort_grad_over_r - f * (omega - omega_deep) - gamma
     return {"r": r, "u": u + uc, "u_prime": up + ucp, "u_second": upp + ucpp,
@@ -166,7 +192,8 @@ def main(argv=None):
     parser.add_argument("config", type=Path)
     parser.add_argument("--output", required=True, type=Path, help="new analysis directory")
     parser.add_argument("--ld-values", help="comma-separated deformation radii in metres; inf allowed; default from config")
-    parser.add_argument("--deep-ratios", default="0,0.5,1", help="deep ring speed / configured upper ring speed")
+    parser.add_argument("--deep-ratios", help="annular only: deep ring / upper ring speed; default 0,0.5,1")
+    parser.add_argument("--match-fractions", help="matched_upper only: comma-separated fractions; default from config")
     parser.add_argument("--m-range", default="1:16", help="inclusive azimuthal mode range FIRST:LAST")
     parser.add_argument("--radial-nodes", default="128,256", help="comma-separated counts of interior radial nodes")
     parser.add_argument("--outer-radius", type=float, default=24000000.0, help="metres; must lie inside or on untapered interior edge")
@@ -174,7 +201,22 @@ def main(argv=None):
     args = parser.parse_args(argv)
     config = load_config(args.config)
     lds = number_list(args.ld_values) if args.ld_values else [float(config["physics"]["deformation_radius_m"])]
-    ratios, resolutions = number_list(args.deep_ratios), number_list(args.radial_nodes, integer=True)
+    profile = config["physics"].get("deep_profile", "annular")
+    if profile not in ("annular", "matched_upper"):
+        parser.error("unknown deep_profile")
+    if profile == "matched_upper":
+        if args.deep_ratios is not None:
+            parser.error("--deep-ratios is incompatible with matched_upper; use --match-fractions")
+        fractions = number_list(args.match_fractions) if args.match_fractions else [config["physics"].get("deep_match_fraction", 1.0)]
+        if any(v is None or isinstance(v, bool) or not np.isfinite(v) or v < 0 for v in fractions):
+            parser.error("matched fractions must be finite and nonnegative")
+        ratios, controls = [], fractions
+    else:
+        if args.match_fractions is not None:
+            parser.error("--match-fractions requires deep_profile=matched_upper")
+        ratios, fractions = number_list(args.deep_ratios or "0,0.5,1"), []
+        controls = ratios
+    resolutions = number_list(args.radial_nodes, integer=True)
     first, last = (int(x) for x in args.m_range.split(":"))
     if first < 1 or last < first:
         parser.error("m-range must satisfy 1 <= FIRST <= LAST")
@@ -198,17 +240,18 @@ def main(argv=None):
         "analysis_script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "python": platform.python_version(), "numpy": np.__version__, "scipy": scipy.__version__,
         "config": config, "outer_radius_m": args.outer_radius, "radial_nodes": resolutions,
-        "deformation_radii_m": lds, "deep_ratios": ratios, "mode_range": [first, last],
+        "deformation_radii_m": lds, "deep_profile": profile, "deep_ratios": ratios,
+        "deep_match_fractions": fractions, "mode_range": [first, last],
         "growth_tolerance_s": args.growth_tolerance,
         "method": "Second-order radial flux difference; sqrt(r)-weighted symmetric R^2 L_m; scipy generalized eigenproblem; exp[i*m*(theta-c*t)].",
         "assumptions": [
             "Exact analytic untapered upper ring plus central cyclone; any configured nonaxisymmetric initial disturbance is omitted.",
-            "Lower layer is a prescribed, motionless-in-time axisymmetric ring; its speed coefficient is ratio times initial.jet_speed_m_s.",
+            "Lower layer is prescribed and steady: annular uses deep/upper ring coefficient; matched_upper multiplies the entire circular upper flow, including its core cyclone.",
             "Regular m>=1 origin condition phi(0)=0 and artificial circular outer Dirichlet condition phi(R)=0.",
             "Convection, sponge and hyperviscosity are absent from this inviscid linear calculation, regardless of configuration values.",
             "This circular outer boundary is not the Julia model's periodic outer continuation. Check outer-radius and radial-grid sensitivity.",
             "Growth of a circular base is not stability of a nonlinear polygon, a matched rotating exact wave, or a claim about Saturn.",
-            "Non-growing spectra do not rule out transient growth or finite-amplitude instability. A leading drift selected from a stable spectrum is not unique when many modes tie at zero growth.",
+            "Non-growing spectra do not rule out transient growth or finite-amplitude instability. Leading drift and eigenfunction are omitted when growth does not exceed tolerance; all raw eigenvalues are retained.",
         ]}
     (args.output / "metadata.json").write_text(json.dumps(clean_json(metadata), indent=2, allow_nan=False) + "\n")
     (args.output / "config.toml").write_bytes(args.config.read_bytes())
@@ -216,32 +259,36 @@ def main(argv=None):
     case_index = 0
     for ld in lds:
         # Deep flow vanishes from unforced barotropic dynamics; do not duplicate it.
-        active_ratios = [0.0] if math.isinf(ld) else ratios
-        for ratio in active_ratios:
-            speed = ratio * config["initial"]["jet_speed_m_s"]
+        active_controls = [0.0] if math.isinf(ld) else controls
+        for control in active_controls:
+            speed = control * config["initial"]["jet_speed_m_s"] if profile == "annular" else None
+            fraction = control if profile == "matched_upper" else None
             for n in resolutions:
                 for mode in range(first, last + 1):
                     r, operator = radial_operator(n, args.outer_radius, mode, ld)
-                    base = circular_base(config, r, ld, speed)
+                    base = circular_base(config, r, ld, speed, fraction)
                     result = solve_modes(r, operator, base["omega"], base["q_r_over_r"], args.outer_radius, mode)
                     if result["relative_residual"] > 1e-8:
                         raise ArithmeticError("leading eigenpair residual exceeds 1e-8")
                     key = "case_{:05d}".format(case_index)
                     spectra[key] = result["eigenvalues"]
-                    spectra[key + "_leading_phi"] = result["leading_phi"]
-                    row = {"spectrum_key": key, "deformation_radius_m": ld, "deep_ratio": ratio,
+                    growing = result["growth_rate_s"] > args.growth_tolerance
+                    if growing:
+                        spectra[key + "_leading_phi"] = result["leading_phi"]
+                    row = {"spectrum_key": key, "deformation_radius_m": ld, "deep_profile": profile,
+                           "deep_ratio": control if profile == "annular" else None, "deep_match_fraction": fraction,
                            "deep_speed_m_s": speed, "radial_nodes": n, "outer_radius_m": args.outer_radius,
                            "m": mode, "leading_growth_rate_s": result["growth_rate_s"],
-                           "leading_angular_pattern_speed_s": result["angular_pattern_speed_s"],
-                           "leading_frequency_real_s": result["frequency_real_s"],
+                           "leading_angular_pattern_speed_s": result["angular_pattern_speed_s"] if growing else None,
+                           "leading_frequency_real_s": result["frequency_real_s"] if growing else None,
                            "leading_relative_residual": result["relative_residual"],
                            "q_r_over_r_min": float(np.min(base["q_r_over_r"])),
                            "q_r_over_r_max": float(np.max(base["q_r_over_r"])),
                            "q_gradient_changes_sign": bool(np.min(base["q_r_over_r"]) < 0 < np.max(base["q_r_over_r"])),
-                           "growing_above_tolerance": bool(result["growth_rate_s"] > args.growth_tolerance)}
+                           "growing_above_tolerance": bool(growing)}
                     records.append(row)
                     case_index += 1
-                print("screened Ld={} m, deep ratio={}, N={}, modes={}:{}".format(ld, ratio, n, first, last), flush=True)
+                print("screened Ld={} m, {} control={}, N={}, modes={}:{}".format(ld, profile, control, n, first, last), flush=True)
     with (args.output / "leading_modes.csv").open("w", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=list(records[0]))
         writer.writeheader()

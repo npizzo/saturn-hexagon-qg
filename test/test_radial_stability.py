@@ -52,6 +52,37 @@ class RadialStabilityTests(unittest.TestCase):
         barotropic = radial.circular_base(c, r, np.inf, 0.0)
         np.testing.assert_allclose(finite["q_r_over_r"], barotropic["q_r_over_r"], rtol=0, atol=1e-14)
 
+    def test_matched_upper_includes_cyclone_and_rejects_ignored_overrides(self):
+        c = self.config()
+        c["physics"].update(deep_profile="matched_upper", deep_match_fraction=1.0)
+        r = np.linspace(0.0, 2.0, 80)
+        finite = radial.circular_base(c, r, 0.4)
+        barotropic = radial.circular_base(c, r, np.inf)
+        np.testing.assert_allclose(finite["u_deep"], finite["u"], rtol=0, atol=0)
+        np.testing.assert_allclose(finite["q_r_over_r"], barotropic["q_r_over_r"], rtol=0, atol=1e-14)
+        c["physics"].pop("deep_match_fraction")
+        default = radial.circular_base(c, r, 0.4)
+        np.testing.assert_allclose(default["u_deep"], finite["u_deep"], rtol=0, atol=0)
+        c["physics"]["deep_match_fraction"] = 1.0
+        half = radial.circular_base(c, r, 0.4, match_fraction=0.5)
+        np.testing.assert_allclose(half["u_deep"], 0.5*finite["u"], rtol=0, atol=0)
+        np.testing.assert_allclose(half["q_r_over_r"]-finite["q_r_over_r"], -0.5*finite["omega"]/0.4**2, atol=2e-14)
+        with self.assertRaises(ValueError):
+            radial.circular_base(c, r, 0.4, deep_speed=0.0)
+        for fraction in (-0.1, np.nan, np.inf, True):
+            with self.assertRaises(ValueError):
+                radial.circular_base(c, r, 0.4, match_fraction=fraction)
+        c["physics"]["deep_jet_speed_m_s"] = 0.2
+        with self.assertRaisesRegex(ValueError, "deep_jet_speed_m_s=0"):
+            radial.circular_base(c, r, 0.4)
+        c["physics"]["deep_jet_speed_m_s"] = 0.0
+        c["physics"]["deep_profile"] = "annular"
+        with self.assertRaisesRegex(ValueError, "deep_match_fraction applies"):
+            radial.circular_base(c, r, 0.4)
+        c["physics"].pop("deep_match_fraction")
+        with self.assertRaises(ValueError):
+            radial.circular_base(c, r, 0.4, 0.2, match_fraction=0.5)
+
     def test_weighted_operator_is_symmetric_negative_definite(self):
         for mode in [1, 6, 16]:
             r, operator = radial.radial_operator(48, 2.0, mode, 0.7)

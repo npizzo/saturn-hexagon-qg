@@ -30,6 +30,7 @@ cyclone_psi(r, U, R) = -U*R*exp(0.5-r^2/(2R^2))
 
 function initial_streamfunctions(c, x, y)
     a, d, b = c["initial"], c["physics"], c["boundary"]
+    matched = get(d, "deep_profile", "annular") == "matched_upper"
     psi = zeros(length(x), length(y)); psid = similar(psi); base = similar(psi)
     rng = MersenneTwister(c["experiment"]["seed"])
     modes = a["perturbation"] == "none" ? Int[] : a["perturbation"] == "mode" ? [a["mode"]] : collect(1:a["m_max"])
@@ -39,7 +40,7 @@ function initial_streamfunctions(c, x, y)
         r = hypot(x[i], y[j]); theta = atan(y[j], x[i])
         w = smooth_window(r, b["inner_radius_m"], b["outer_radius_m"])
         base[i,j] = w*(ring_psi(r, a["jet_speed_m_s"], a["jet_radius_m"], a["jet_width_m"]) + cyclone_psi(r, a["cyclone_speed_m_s"], a["cyclone_radius_m"]))
-        psid[i,j] = w*ring_psi(r, d["deep_jet_speed_m_s"], d["deep_jet_radius_m"], d["deep_jet_width_m"])
+        psid[i,j] = matched ? 0.0 : w*ring_psi(r, d["deep_jet_speed_m_s"], d["deep_jet_radius_m"], d["deep_jet_width_m"])
         perturb = 0.0
         rho = r/a["jet_radius_m"]; z = (r^2-a["jet_radius_m"]^2)/(2a["jet_radius_m"]*a["jet_width_m"])
         for (m, phase) in zip(modes, phases)
@@ -49,7 +50,14 @@ function initial_streamfunctions(c, x, y)
         psi[i,j] = base[i,j] + w*perturb
     end
     # Consistent zero-area-mean gauges are part of the convection definition.
-    psi .-= mean(psi); psid .-= mean(psid); base .-= mean(base)
+    psi .-= mean(psi); base .-= mean(base)
+    if matched
+        # Prescribe the unperturbed ring AND cyclone, with the upper base's
+        # taper and gauge. Never copy the initial nonaxisymmetric disturbance.
+        psid .= get(d, "deep_match_fraction", 1.0) .* base
+    else
+        psid .-= mean(psid)
+    end
     return psi, psid, base
 end
 
@@ -76,6 +84,15 @@ function build_simulation(c::AbstractDict; device="cpu")
     project(a) = (ah = rfft(a); dealias!(ah, grid); irfft(ah, n))
     psid = project(psid)
     B = project(B)
+    if get(c["physics"], "deep_profile", "annular") == "matched_upper"
+        # Initial s is transformed/dealiased again by QG.set_q!. The pinned
+        # library's cutoff mask is not exactly idempotent after a real-space
+        # round trip at its conjugate cutoff edge. Apply the same two passes
+        # to the prescribed base so matching remains exact on the stored grid.
+        matched_psid = project(psid)
+        B .+= kap2 .* (matched_psid .- psid)
+        psid = matched_psid
+    end
     s = project(irfft(-(k2 .+ kap2).*rfft(psi), n))
     sref = project(irfft(-(k2 .+ kap2).*rfft(base), n))
     taper = [1-smooth_window(hypot(xx,yy), b["inner_radius_m"], b["outer_radius_m"]) for xx in x, yy in y]

@@ -1,0 +1,40 @@
+stage	id	physics	perturbation	nx	dt_s	duration_s	role
+validation	bt_a000_w1000__gpu_smoke	bt_a000_w1000	broadband	256	10.0	400.0	Short CPU/GPU agreement and output check
+validation	ld3200_a050_w1000__gpu_smoke	ld3200_a050_w1000	broadband	256	10.0	400.0	Short CPU/GPU agreement and output check
+validation	ld500_a100_w1000__gpu_smoke	ld500_a100_w1000	broadband	256	10.0	400.0	Short CPU/GPU agreement and output check
+controls	bt_a000_w1000__axisymmetric	bt_a000_w1000	none	1024	50.0	100000.0	Check axisymmetric numerical drift; BT alpha pair must agree
+controls	bt_a100_w1000__axisymmetric	bt_a100_w1000	none	1024	50.0	100000.0	Check axisymmetric numerical drift; BT alpha pair must agree
+controls	ld3200_a000_w1000__axisymmetric	ld3200_a000_w1000	none	1024	50.0	100000.0	Check axisymmetric numerical drift; BT alpha pair must agree
+controls	ld3200_a100_w1000__axisymmetric	ld3200_a100_w1000	none	1024	50.0	100000.0	Check axisymmetric numerical drift; BT alpha pair must agree
+controls	bt_a000_w1000__bb10km_s42	bt_a000_w1000	broadband	1024	50.0	500000.0	Perturbed barotropic instability reference
+screen	ld2000_a000_w1000__bb10km_s42	ld2000_a000_w1000	broadband	1024	50.0	500000.0	Fixed upper winds; change finite LD and whole deep profile amplitude
+screen	ld2000_a050_w1000__bb10km_s42	ld2000_a050_w1000	broadband	1024	50.0	500000.0	Fixed upper winds; change finite LD and whole deep profile amplitude
+screen	ld2000_a100_w1000__bb10km_s42	ld2000_a100_w1000	broadband	1024	50.0	500000.0	Fixed upper winds; change finite LD and whole deep profile amplitude
+screen	ld3200_a000_w1000__bb10km_s42	ld3200_a000_w1000	broadband	1024	50.0	500000.0	Fixed upper winds; change finite LD and whole deep profile amplitude
+screen	ld3200_a050_w1000__bb10km_s42	ld3200_a050_w1000	broadband	1024	50.0	500000.0	Fixed upper winds; change finite LD and whole deep profile amplitude
+screen	ld3200_a100_w1000__bb10km_s42	ld3200_a100_w1000	broadband	1024	50.0	500000.0	Fixed upper winds; change finite LD and whole deep profile amplitude
+screen	ld4000_a000_w1000__bb10km_s42	ld4000_a000_w1000	broadband	1024	50.0	500000.0	Fixed upper winds; change finite LD and whole deep profile amplitude
+screen	ld4000_a050_w1000__bb10km_s42	ld4000_a050_w1000	broadband	1024	50.0	500000.0	Fixed upper winds; change finite LD and whole deep profile amplitude
+screen	ld4000_a100_w1000__bb10km_s42	ld4000_a100_w1000	broadband	1024	50.0	500000.0	Fixed upper winds; change finite LD and whole deep profile amplitude
+transition	ld500_a100_w1000__bb10km_s42	ld500_a100_w1000	broadband	1024	25.0	1.0e6	Fully matched jet and core; small-LD transition, quiet runs require longer and finer checks
+transition	ld650_a100_w1000__bb10km_s42	ld650_a100_w1000	broadband	1024	25.0	1.0e6	Fully matched jet and core; small-LD transition, quiet runs require longer and finer checks
+transition	ld800_a100_w1000__bb10km_s42	ld800_a100_w1000	broadband	1024	25.0	1.0e6	Fully matched jet and core; small-LD transition, quiet runs require longer and finer checks
+transition	ld1000_a100_w1000__bb10km_s42	ld1000_a100_w1000	broadband	1024	25.0	1.0e6	Fully matched jet and core; small-LD transition, quiet runs require longer and finer checks
+width	ld3200_a000_w1500__bb10km_s42	ld3200_a000_w1500	broadband	1024	50.0	500000.0	Width sensitivity changes the upper jet; not an observational fit
+width	ld3200_a100_w1500__bb10km_s42	ld3200_a100_w1500	broadband	1024	50.0	500000.0	Width sensitivity changes the upper jet; not an observational fit
+width	ld3200_a000_w2000__bb10km_s42	ld3200_a000_w2000	broadband	1024	50.0	500000.0	Width sensitivity changes the upper jet; not an observational fit
+width	ld3200_a100_w2000__bb10km_s42	ld3200_a100_w2000	broadband	1024	50.0	500000.0	Width sensitivity changes the upper jet; not an observational fit
+width	ld3200_a000_w3000__bb10km_s42	ld3200_a000_w3000	broadband	1024	50.0	500000.0	Width sensitivity changes the upper jet; not an observational fit
+width	ld3200_a100_w3000__bb10km_s42	ld3200_a100_w3000	broadband	1024	50.0	500000.0	Width sensitivity changes the upper jet; not an observational fit
+numerics	ld3200_a100_w1000__half_dt	ld3200_a100_w1000	broadband	1024	25.0	500000.0	Timestep refinement at unchanged grid and physical viscosity
+numerics	ld3200_a100_w1000__nx2048_fixed_cutoff	ld3200_a100_w1000	broadband	2048	25.0	500000.0	Double mesh; same cutoff damping time; physical hyperviscosity reduced 256-fold
+numerics	ld3200_a100_w1000__nx2048_fixed_nu	ld3200_a100_w1000	broadband	2048	1.5625	500000.0	Double mesh at unchanged physical hyperviscosity; compare with fixed-cutoff refinement
+numerics	ld3200_a100_w1000__amplitude5km	ld3200_a100_w1000	broadband	1024	50.0	500000.0	Half-amplitude linearity and diagnostic-floor check
+numerics	ld3200_a100_w1000__weaker_damping	ld3200_a100_w1000	broadband	1024	50.0	500000.0	Tenfold weaker hyperviscosity at fixed grid
+numerics	ld500_a100_w1000__half_dt	ld500_a100_w1000	broadband	1024	12.5	1.0e6	Timestep refinement at unchanged grid and physical viscosity
+numerics	ld500_a100_w1000__nx2048_fixed_cutoff	ld500_a100_w1000	broadband	2048	12.5	1.0e6	Double mesh; same cutoff damping time; physical hyperviscosity reduced 256-fold
+numerics	ld500_a100_w1000__nx2048_fixed_nu	ld500_a100_w1000	broadband	2048	0.78125	1.0e6	Double mesh at unchanged physical hyperviscosity; compare with fixed-cutoff refinement
+numerics	ld500_a100_w1000__amplitude5km	ld500_a100_w1000	broadband	1024	25.0	1.0e6	Half-amplitude linearity and diagnostic-floor check
+numerics	ld500_a100_w1000__weaker_damping	ld500_a100_w1000	broadband	1024	25.0	1.0e6	Tenfold weaker hyperviscosity at fixed grid
+boundary	ld500_a100_w1000__box75Mm	ld500_a100_w1000	broadband	1280	25.0	1.0e6	Larger box and outward continuation at fixed dx and physical hyperviscosity; inspect interface gauge too
+boundary	ld3200_a100_w1000__box75Mm	ld3200_a100_w1000	broadband	1280	25.0	500000.0	Larger box and outward continuation at fixed dx and physical hyperviscosity; inspect interface gauge too

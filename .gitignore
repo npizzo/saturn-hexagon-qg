@@ -3,6 +3,7 @@
 /runtime/
 /.unity/
 /.julia/
+/.analysis-env/
 /analysis/
 /work/
 __pycache__/

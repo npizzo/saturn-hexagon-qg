@@ -28,6 +28,7 @@ LIMITS = [
     "System III conversion assumes configured rotation_rate_s is the frame rate and positive model theta is eastward.",
     "The 38363.01 s target is the 2008-2014 measurement, not a timeless exact target or an acceptance tolerance.",
     "Different source/configuration hashes are recorded for comparison; this tool does not establish that runs differ in only one parameter.",
+    "Regime extrema cover saved diagnostic times only and do not certify QG validity; absent columns and undefined barotropic thickness are unavailable, not zero.",
 ]
 
 
@@ -183,6 +184,35 @@ def measure_mode(columns, config, mode, options):
     return result
 
 
+def regime_summary(columns, config):
+    """Optional sampled extrema, preserving missing/undefined/nonfinite states."""
+    ld = config.get("physics", {}).get("deformation_radius_m")
+    barotropic = isinstance(ld, (int, float)) and math.isinf(ld) and ld > 0
+    result = {"scope": "all_saved_diagnostic_rows_not_continuous_time_extrema", "columns": {}}
+    metrics = [("max_abs_hprime_over_H", "maximum_abs_hprime_over_H", np.max),
+               ("min_h_over_H", "minimum_h_over_H", np.min),
+               ("max_abs_zeta_over_f", "maximum_abs_zeta_over_f", np.max)]
+    for source, target, operation in metrics:
+        result[target] = None
+        if source not in columns:
+            result["columns"][source] = {"status": "absent_legacy_or_unrecorded_column"}
+            continue
+        values = np.asarray(columns[source], dtype=float)
+        good = np.isfinite(values)
+        finite_count = int(np.count_nonzero(good))
+        info = {"finite_samples": finite_count, "nonfinite_samples": int(values.size - finite_count),
+                "total_samples": int(values.size)}
+        if barotropic and source != "max_abs_zeta_over_f":
+            info["status"] = "unexpected_finite_barotropic_depth_values" if finite_count else "not_applicable_barotropic"
+        elif finite_count:
+            result[target] = float(operation(values[good]))
+            info["status"] = "all_samples_finite" if finite_count == values.size else "partly_nonfinite"
+        else:
+            info["status"] = "no_finite_samples"
+        result["columns"][source] = info
+    return result
+
+
 def summarize_run(directory, options):
     directory = Path(directory).resolve()
     run = dict(result_directory=str(directory), execution_status="incomplete",
@@ -244,6 +274,7 @@ def summarize_run(directory, options):
         if not np.all(np.isfinite(t)) or np.any(np.diff(t) <= 0) or t[0] < 0:
             raise ValueError("diagnostic times must be finite, nonnegative and strictly increasing; no sorting or deduplication is performed")
         run["hashes"]["diagnostics.csv_sha256"] = sha256(path)
+        run["regime_summary"] = regime_summary(columns, config)
         run.update(diagnostic_rows=len(rows), initial_time_s=float(t[0]), final_time_s=float(t[-1]))
         duration = float(config["numerics"]["duration_s"])
         tolerance = max(1e-6, duration * 1e-10)
@@ -330,6 +361,13 @@ def main(argv=None):
                       "  m6 growth=%s s^-1; c_model=%s rad/s; c_SystemIII=%s rad/s; status=%s / %s" %
                       (six.get("growth_rate_s"), six.get("angular_pattern_speed_model_s"),
                        six.get("angular_pattern_speed_system_iii_s"), six.get("fit_status"), six.get("phase_status"))])
+        regime = run.get("regime_summary")
+        if regime:
+            lines.append("  Sampled regime extrema: max |h'/H|=%s; min h/H=%s; max |zeta/f|=%s" %
+                         (regime["maximum_abs_hprime_over_H"], regime["minimum_h_over_H"],
+                          regime["maximum_abs_zeta_over_f"]))
+            lines.append("  Regime columns: " + "; ".join(key + "=" + info["status"]
+                                                          for key, info in regime["columns"].items()))
         lines.extend("  Issue: " + issue for issue in run["issues"])
     lines.extend(["", "Interpretation limits:"] + ["- " + limit for limit in LIMITS])
     with (output / "report.txt").open("x") as stream:
