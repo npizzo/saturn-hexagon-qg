@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "name": "screen__ld4000_dp050__bb10km_s42",
+  "run_id": "screen-ld4000-dp050-bb10km-s42-c0a98746",
+  "status": "completed",
+  "start_s": 0.0,
+  "end_s": 500000.0,
+  "source_sha256": "50ba99a095bdf94bcd2c331dbffb0da6974b8752ef5b409cd25e4c4699fb8709",
+  "manifest_sha256": "d55feb3c66021f9ec2322d58d01188fe88009d329b0be0fd45123e50526a5838",
+  "source_verified": true,
+  "manifest_verified": true,
+  "input_config_sha256": "c0a987468cb0f0efa3e33f1d254f9411e9e010e064346427b36cdd1a4d05721c",
+  "input_diagnostics_sha256": "a6a158d0c912e3efac1f9d67454cef669619464f4d132699c1dfdc8baafd999b",
+  "first_incomplete_tracker_time_s": null,
+  "mode_numbers": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32
+  ],
+  "snapshot_count": 11,
+  "frames": [
+    {
+      "file": "snapshot_000000000.jld2",
+      "time_s": 0.0,
+      "sha256": "2cee6c388d7b82d288e2e408adb4033e42e563c5fee687644926802b4633a9fc",
+      "image": "frame_000.png"
+    },
+    {
+      "file": "snapshot_000001000.jld2",
+      "time_s": 50000.0,
+      "sha256": "0908e12a43447849b7fdf6462775efc30a9e03c5ec3b95589deb16734e5cf009",
+      "image": "frame_001.png"
+    },
+    {
+      "file": "snapshot_000002000.jld2",
+      "time_s": 100000.0,
+      "sha256": "f86912846274ceacc62aec7cdb98195412a881c1c1900c9a96511bca83f73165",
+      "image": "frame_002.png"
+    },
+    {
+      "file": "snapshot_000003000.jld2",
+      "time_s": 150000.0,
+      "sha256": "58a034957448cb71dfdf97a46f7a9a66ce05962fa68ffab864d0f33f9a69dcf7",
+      "image": "frame_003.png"
+    },
+    {
+      "file": "snapshot_000004000.jld2",
+      "time_s": 200000.0,
+      "sha256": "a3d4f3c5f5b2b2e98f84bb4bd840e348552f9aafb85ebe7e91842de5942839f1",
+      "image": "frame_004.png"
+    },
+    {
+      "file": "snapshot_000005000.jld2",
+      "time_s": 250000.0,
+      "sha256": "f314faabbbe7b7867a40281dccf642362a9bbff44ee930edf63b529a2ccd84f5",
+      "image": "frame_005.png"
+    },
+    {
+      "file": "snapshot_000006000.jld2",
+      "time_s": 300000.0,
+      "sha256": "bf6a18af75ff7cac1b61f5fd2896bd0e3dce1554822021d5408b98c2b827d566",
+      "image": "frame_006.png"
+    },
+    {
+      "file": "snapshot_000007000.jld2",
+      "time_s": 350000.0,
+      "sha256": "a4142aa97dbc213d2d3343c1ae97b1e915d2860f6a968d410008d0367e7f51d3",
+      "image": "frame_007.png"
+    },
+    {
+      "file": "snapshot_000008000.jld2",
+      "time_s": 400000.0,
+      "sha256": "f4514911cdfbb727063a2aa8a8c2d80028d20970efcbf5acddcd93f1523b3e5b",
+      "image": "frame_008.png"
+    },
+    {
+      "file": "snapshot_000009000.jld2",
+      "time_s": 450000.0,
+      "sha256": "353956947baa775458b17db1c85e2658c392ccce220d3b827be46bc810202c19",
+      "image": "frame_009.png"
+    },
+    {
+      "file": "snapshot_000010000.jld2",
+      "time_s": 500000.0,
+      "sha256": "f7df77bf9a811ffa849dedae798924d81d237342138afe1f0e713dafb18ab4fa",
+      "image": "frame_010.png"
+    }
+  ],
+  "shared_color_limits": {
+    "relative_vorticity_s_inverse": [
+      -0.00010718388374333912,
+      0.00010718388374333912
+    ],
+    "speed_m_s": [
+      0.0,
+      112.39217369273418
+    ],
+    "mode_display_floor_m": 10.0,
+    "mode_amplitude_max_m": 572653.7274704438,
+    "scope": "all supplied runs; field limits use all saved science-disk frames, mode limit uses all diagnostics"
+  },
+  "field_definition": "Relative vorticity = s + psi / LD^2; speed = sqrt(u^2+v^2).",
+  "orientation": "x = r cos(theta), y = r sin(theta); origin lower; positive theta counterclockwise in this north-polar view.",
+  "display": "Fields block-averaged to at most 512 cells per side for rendering only; masked outside science radius.",
+  "phase_policy": "No drift fit or temporal phase unwrapping in this gallery.",
+  "interpretation": "Completion is not a stability certificate. An imposed mode is not evidence of spontaneous selection. Tracker gaps do not measure a physical lifetime.",
+  "public_config_sha256": "6efaa260d9e13c8146d16dbef234229a01b8f23bad0a38833611d2d753842f16",
+  "public_diagnostics_sha256": "e73728a440492ac87e02c4a6a44e1ca392dc69adb3b6fd8ffc1a50e3bb8f3968",
+  "movie": "movie.mp4"
+}

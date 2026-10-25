@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "name": "controls__ld3200_a100_w1000__axisymmetric",
+  "run_id": "controls-ld3200-a100-w1000-axisymmetric-b4fd2389",
+  "status": "completed",
+  "start_s": 0.0,
+  "end_s": 100000.0,
+  "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+  "manifest_sha256": "d55feb3c66021f9ec2322d58d01188fe88009d329b0be0fd45123e50526a5838",
+  "source_verified": true,
+  "manifest_verified": true,
+  "input_config_sha256": "b4fd23891ee85da9b09a5d2225c5ae6a2e3d90aba8f1077cd0b8a92c341232c4",
+  "input_diagnostics_sha256": "9fc21145ed390a87abdee3dbc7c38a18f580c1e357db4855713e348dce547267",
+  "first_incomplete_tracker_time_s": null,
+  "mode_numbers": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32
+  ],
+  "snapshot_count": 5,
+  "frames": [
+    {
+      "file": "snapshot_000000000.jld2",
+      "time_s": 0.0,
+      "sha256": "fffd98d6727d4a097f35b361eeb6ccd5aa11348fac2878d43a73ed8bd40adaa6",
+      "image": "frame_000.png"
+    },
+    {
+      "file": "snapshot_000000500.jld2",
+      "time_s": 25000.0,
+      "sha256": "9aff8095150d481861882b6a308bdad4cf9066652bbcfe175a2a6c4e2d0a1983",
+      "image": "frame_001.png"
+    },
+    {
+      "file": "snapshot_000001000.jld2",
+      "time_s": 50000.0,
+      "sha256": "5cc5a09448912114cc7024cf0b04bba67cb4c4634edeb136e97e11c10a36a2a2",
+      "image": "frame_002.png"
+    },
+    {
+      "file": "snapshot_000001500.jld2",
+      "time_s": 75000.0,
+      "sha256": "3378e8873754d06b4d9d2e446481d2ba45d1f645dc5956a03741421accca3ea9",
+      "image": "frame_003.png"
+    },
+    {
+      "file": "snapshot_000002000.jld2",
+      "time_s": 100000.0,
+      "sha256": "c9ba969ae28fe089e7e77ab3c1373f59299249cd2546724d7985a42bcdceca20",
+      "image": "frame_004.png"
+    }
+  ],
+  "shared_color_limits": {
+    "relative_vorticity_s_inverse": [
+      -0.00010718388374333912,
+      0.00010718388374333912
+    ],
+    "speed_m_s": [
+      0.0,
+      107.47486286904241
+    ],
+    "mode_display_floor_m": 10.0,
+    "mode_amplitude_max_m": 560757.7542318065,
+    "scope": "all supplied runs; field limits use all saved science-disk frames, mode limit uses all diagnostics"
+  },
+  "field_definition": "Relative vorticity = s + psi / LD^2; speed = sqrt(u^2+v^2).",
+  "orientation": "x = r cos(theta), y = r sin(theta); origin lower; positive theta counterclockwise in this north-polar view.",
+  "display": "Fields block-averaged to at most 512 cells per side for rendering only; masked outside science radius.",
+  "phase_policy": "No drift fit or temporal phase unwrapping in this gallery.",
+  "interpretation": "Completion is not a stability certificate. An imposed mode is not evidence of spontaneous selection. Tracker gaps do not measure a physical lifetime.",
+  "public_config_sha256": "aaa59c4f8b92ede35fb5f45e5df8140447aa986eadab029a1111eb755dfc44a1",
+  "public_diagnostics_sha256": "0c046fe4c583ee45e29c8b33a1b354360994e9b6ae8f863098783579021b1e99",
+  "movie": "movie.mp4"
+}

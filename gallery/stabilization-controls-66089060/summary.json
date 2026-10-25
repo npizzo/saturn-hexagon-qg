@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "title": "Whole-profile lower layer: base-flow controls",
+  "description": "Four unperturbed circular jet-and-cyclone controls run to 100,000 seconds, plus a barotropic broadband-perturbation case run to 500,000 seconds. These 1024-squared runs test base-flow behavior and the barotropic response; their differing durations and perturbations must be considered. Convection is off. Completion does not establish nonlinear stability or an observed Saturn hexagon.",
+  "runs": [
+    {
+      "name": "controls__bt_a000_w1000__axisymmetric",
+      "run_id": "controls-bt-a000-w1000-axisymmetric-aaef6899",
+      "page": "runs/controls-bt-a000-w1000-axisymmetric-aaef6899/index.html",
+      "summary": "runs/controls-bt-a000-w1000-axisymmetric-aaef6899/summary.json",
+      "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+      "input_config_sha256": "aaef6899cb382623051627ea6da1581398aa67a14ec39456fb832f05c53534da",
+      "snapshot_count": 5,
+      "end_s": 100000.0
+    },
+    {
+      "name": "controls__bt_a100_w1000__axisymmetric",
+      "run_id": "controls-bt-a100-w1000-axisymmetric-21eceb83",
+      "page": "runs/controls-bt-a100-w1000-axisymmetric-21eceb83/index.html",
+      "summary": "runs/controls-bt-a100-w1000-axisymmetric-21eceb83/summary.json",
+      "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+      "input_config_sha256": "21eceb831d8ebda50b67cebfdf67768d91018a83fa81b8667ae2bd9f50b18230",
+      "snapshot_count": 5,
+      "end_s": 100000.0
+    },
+    {
+      "name": "controls__ld3200_a000_w1000__axisymmetric",
+      "run_id": "controls-ld3200-a000-w1000-axisymmetric-694760e4",
+      "page": "runs/controls-ld3200-a000-w1000-axisymmetric-694760e4/index.html",
+      "summary": "runs/controls-ld3200-a000-w1000-axisymmetric-694760e4/summary.json",
+      "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+      "input_config_sha256": "694760e4fd5766de4a9f478d51e5a196b28ed10e29f04e5ac1e8f5f6cb6e4cfd",
+      "snapshot_count": 5,
+      "end_s": 100000.0
+    },
+    {
+      "name": "controls__ld3200_a100_w1000__axisymmetric",
+      "run_id": "controls-ld3200-a100-w1000-axisymmetric-b4fd2389",
+      "page": "runs/controls-ld3200-a100-w1000-axisymmetric-b4fd2389/index.html",
+      "summary": "runs/controls-ld3200-a100-w1000-axisymmetric-b4fd2389/summary.json",
+      "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+      "input_config_sha256": "b4fd23891ee85da9b09a5d2225c5ae6a2e3d90aba8f1077cd0b8a92c341232c4",
+      "snapshot_count": 5,
+      "end_s": 100000.0
+    },
+    {
+      "name": "controls__bt_a000_w1000__bb10km_s42",
+      "run_id": "controls-bt-a000-w1000-bb10km-s42-29fa9c25",
+      "page": "runs/controls-bt-a000-w1000-bb10km-s42-29fa9c25/index.html",
+      "summary": "runs/controls-bt-a000-w1000-bb10km-s42-29fa9c25/summary.json",
+      "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+      "input_config_sha256": "29fa9c252e2b53cb4bc51c73650889a7eae09bc3b94bfa774469e6cc9bf8f77f",
+      "snapshot_count": 11,
+      "end_s": 500000.0
+    }
+  ],
+  "shared_color_limits": {
+    "relative_vorticity_s_inverse": [
+      -0.00010718388374333912,
+      0.00010718388374333912
+    ],
+    "speed_m_s": [
+      0.0,
+      107.47486286904241
+    ],
+    "mode_display_floor_m": 10.0,
+    "mode_amplitude_max_m": 560757.7542318065,
+    "scope": "all supplied runs; field limits use all saved science-disk frames, mode limit uses all diagnostics"
+  },
+  "media_policy": "Actual saved frames only; optional MP4 uses equal display durations with no temporal interpolation."
+}

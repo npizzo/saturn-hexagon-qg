@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "title": "Initial screen: deformation radius and prescribed deep jet",
+  "description": "Six 1024-squared exploratory runs start with the same broadband-perturbed upper jet and cyclone and evolve for 500,000 seconds. They compare the barotropic limit with 2,000 and 4,000 km deformation radii and prescribed deep annular jets. Convection is off. This earlier campaign uses a different deep-flow construction from whole-profile matching and from the Rostami benchmark; it is not a verified stable hexagon or observational drift fit.",
+  "runs": [
+    {
+      "name": "screen__bt__bb10km_s42",
+      "run_id": "screen-bt-bb10km-s42-4a075f27",
+      "page": "runs/screen-bt-bb10km-s42-4a075f27/index.html",
+      "summary": "runs/screen-bt-bb10km-s42-4a075f27/summary.json",
+      "source_sha256": "50ba99a095bdf94bcd2c331dbffb0da6974b8752ef5b409cd25e4c4699fb8709",
+      "input_config_sha256": "4a075f27817e56c61971e23a6935f3902b807419146e6fbdd06f4a380f44e2b0",
+      "snapshot_count": 11,
+      "end_s": 500000.0
+    },
+    {
+      "name": "screen__ld2000_d000__bb10km_s42",
+      "run_id": "screen-ld2000-d000-bb10km-s42-639cf0be",
+      "page": "runs/screen-ld2000-d000-bb10km-s42-639cf0be/index.html",
+      "summary": "runs/screen-ld2000-d000-bb10km-s42-639cf0be/summary.json",
+      "source_sha256": "50ba99a095bdf94bcd2c331dbffb0da6974b8752ef5b409cd25e4c4699fb8709",
+      "input_config_sha256": "639cf0be21dbbd8feae8b09590e6978103c7444caff57fe8186bde3374bcb440",
+      "snapshot_count": 11,
+      "end_s": 500000.0
+    },
+    {
+      "name": "screen__ld2000_dp050__bb10km_s42",
+      "run_id": "screen-ld2000-dp050-bb10km-s42-635aa6da",
+      "page": "runs/screen-ld2000-dp050-bb10km-s42-635aa6da/index.html",
+      "summary": "runs/screen-ld2000-dp050-bb10km-s42-635aa6da/summary.json",
+      "source_sha256": "50ba99a095bdf94bcd2c331dbffb0da6974b8752ef5b409cd25e4c4699fb8709",
+      "input_config_sha256": "635aa6dafc09930bd9505bbbff7d4db4a5a0b070d48125daf51ef6f474facc21",
+      "snapshot_count": 11,
+      "end_s": 500000.0
+    },
+    {
+      "name": "screen__ld4000_d000__bb10km_s42",
+      "run_id": "screen-ld4000-d000-bb10km-s42-db132112",
+      "page": "runs/screen-ld4000-d000-bb10km-s42-db132112/index.html",
+      "summary": "runs/screen-ld4000-d000-bb10km-s42-db132112/summary.json",
+      "source_sha256": "50ba99a095bdf94bcd2c331dbffb0da6974b8752ef5b409cd25e4c4699fb8709",
+      "input_config_sha256": "db132112ca7c8b5762c3d37afaf9f4a21f26bac34e39fce2fa2909d9c8cbb59e",
+      "snapshot_count": 11,
+      "end_s": 500000.0
+    },
+    {
+      "name": "screen__ld4000_dp050__bb10km_s42",
+      "run_id": "screen-ld4000-dp050-bb10km-s42-c0a98746",
+      "page": "runs/screen-ld4000-dp050-bb10km-s42-c0a98746/index.html",
+      "summary": "runs/screen-ld4000-dp050-bb10km-s42-c0a98746/summary.json",
+      "source_sha256": "50ba99a095bdf94bcd2c331dbffb0da6974b8752ef5b409cd25e4c4699fb8709",
+      "input_config_sha256": "c0a987468cb0f0efa3e33f1d254f9411e9e010e064346427b36cdd1a4d05721c",
+      "snapshot_count": 11,
+      "end_s": 500000.0
+    },
+    {
+      "name": "screen__ld4000_dp100__bb10km_s42",
+      "run_id": "screen-ld4000-dp100-bb10km-s42-66bb2b60",
+      "page": "runs/screen-ld4000-dp100-bb10km-s42-66bb2b60/index.html",
+      "summary": "runs/screen-ld4000-dp100-bb10km-s42-66bb2b60/summary.json",
+      "source_sha256": "50ba99a095bdf94bcd2c331dbffb0da6974b8752ef5b409cd25e4c4699fb8709",
+      "input_config_sha256": "66bb2b6030824d7d252eb9aacaf93551c2017287d7b47ec740df71a1ebd2a17d",
+      "snapshot_count": 11,
+      "end_s": 500000.0
+    }
+  ],
+  "shared_color_limits": {
+    "relative_vorticity_s_inverse": [
+      -0.00010718388374333912,
+      0.00010718388374333912
+    ],
+    "speed_m_s": [
+      0.0,
+      112.39217369273418
+    ],
+    "mode_display_floor_m": 10.0,
+    "mode_amplitude_max_m": 572653.7274704438,
+    "scope": "all supplied runs; field limits use all saved science-disk frames, mode limit uses all diagnostics"
+  },
+  "media_policy": "Actual saved frames only; optional MP4 uses equal display durations with no temporal interpolation."
+}
