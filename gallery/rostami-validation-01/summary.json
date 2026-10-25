@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "title": "Rostami 2017 QG analogue: CPU/GPU validation",
+  "description": "Three 400-second software checks of the regularized circular jet and cyclone initializer and prescribed deep flow. The jet-only and reference cases have different upper flows; this set is not a controlled stabilization comparison. Longer formation and stability experiments are separate.",
+  "runs": [
+    {
+      "name": "validation__jet_only_smoke",
+      "run_id": "validation-jet-only-smoke-a46d27cc",
+      "page": "runs/validation-jet-only-smoke-a46d27cc/index.html",
+      "summary": "runs/validation-jet-only-smoke-a46d27cc/summary.json",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "input_config_sha256": "a46d27cc28411e1b274ad067723358609628112ba3f8cbca4aa346d890c90e4d",
+      "snapshot_count": 5,
+      "end_s": 400.0
+    },
+    {
+      "name": "validation__reference_half_deep_jet_smoke",
+      "run_id": "validation-reference-half-deep-jet-smoke-bebe9c87",
+      "page": "runs/validation-reference-half-deep-jet-smoke-bebe9c87/index.html",
+      "summary": "runs/validation-reference-half-deep-jet-smoke-bebe9c87/summary.json",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "input_config_sha256": "bebe9c8755144baa8558ccda3442e7fb12678d7c1b6373c304ffd15716c38f99",
+      "snapshot_count": 5,
+      "end_s": 400.0
+    },
+    {
+      "name": "validation__reference_full_deep_smoke",
+      "run_id": "validation-reference-full-deep-smoke-c481fc5b",
+      "page": "runs/validation-reference-full-deep-smoke-c481fc5b/index.html",
+      "summary": "runs/validation-reference-full-deep-smoke-c481fc5b/summary.json",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "input_config_sha256": "c481fc5b08fe07218c83f86dcfe65e65efc9b346ad145ac7eb57d2abce2bd8a7",
+      "snapshot_count": 5,
+      "end_s": 400.0
+    }
+  ],
+  "shared_color_limits": {
+    "relative_vorticity_s_inverse": [
+      -0.0005437384081934644,
+      0.0005437384081934644
+    ],
+    "speed_m_s": [
+      0.0,
+      153.59137348530564
+    ],
+    "mode_display_floor_m": 10.0,
+    "mode_amplitude_max_m": 7636.4006955849645,
+    "scope": "all supplied runs; field limits use all saved science-disk frames, mode limit uses all diagnostics"
+  },
+  "media_policy": "Actual saved frames only; optional MP4 uses equal display durations with no temporal interpolation."
+}

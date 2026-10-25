@@ -19,6 +19,14 @@ initial/final comparison tolerances before displaying validation success.
 Only an allowlisted summary of that report is published; raw run files remain
 in the research archive.
 
+`gallery/rostami-validation-01/` records the three 512², 400-second
+CPU/GPU checks from Unity array 66091773. The archive SHA256 is
+`23002cacb2628194b81209b726c7618aed93b668f1f6b348bff88c3ebfd1ccd0`.
+The maximum final relative L2 field difference is `5.074531993358771e-16`.
+The jet-only and reference cyclone cases have different upper flows; this
+collection is software validation, not a controlled stabilization comparison
+or a reproduction of the paper's mature hexagon. Longer runs are separate.
+
 ## From a cluster run to a local preview
 
 Run the simulations with the existing cluster launchers. For a completed Unity
