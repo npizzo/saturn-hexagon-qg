@@ -1,0 +1,5 @@
+# Python 3.8+; versions below match the local gallery build environment.
+numpy>=1.18
+h5py>=2.10
+matplotlib>=3.2
+toml>=0.10; python_version < "3.11"

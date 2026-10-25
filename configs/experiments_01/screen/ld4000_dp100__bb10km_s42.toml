@@ -1,0 +1,62 @@
+# Staged annular-jet experiment; not an exact-2024 initializer or observed fit.
+[boundary]
+inner_radius_m = 2.4e7
+outer_radius_m = 2.8e7
+sponge_rate_s = 0.0
+
+[convection]
+bias_max = 0.25
+enabled = false
+interval_max_s = 2000.0
+interval_min_s = 1000.0
+psi_limit_m2_s = 1.0e9
+q_max_s = 2.0e-5
+r_max_m = 2.0e7
+r_min_m = 8.0e6
+vortex_radius_m = 250000.0
+
+[experiment]
+name = "screen__ld4000_dp100__bb10km_s42"
+purpose = "selection"
+seed = 42
+
+[grid]
+length_m = 6.0e7
+nx = 1024
+
+[initial]
+cyclone_radius_m = 3.0e6
+cyclone_speed_m_s = 50.0
+displacement_m = 10000.0
+jet_radius_m = 1.5e7
+jet_speed_m_s = 100.0
+jet_width_m = 1.0e6
+m_max = 32
+mode = 6
+perturbation = "broadband"
+
+[numerics]
+cfl_limit = 0.6
+cutoff_damping_time_s = 100000.0
+dt_s = 50.0
+duration_s = 500000.0
+hyper_order = 4
+
+[output]
+checkpoint_interval_s = 100000.0
+diagnostic_interval_s = 2000.0
+jet_search_halfwidth_m = 4.0e6
+m_max = 32
+nr = 256
+ntheta = 720
+snapshot_interval_s = 50000.0
+
+[physics]
+deep_jet_radius_m = 1.5e7
+deep_jet_speed_m_s = 100.0
+deep_jet_width_m = 1.0e6
+deformation_radius_m = 4.0e6
+
+[planet]
+radius_m = 6.0e7
+rotation_rate_s = 0.000165

@@ -1,0 +1,26 @@
+stage	id	physics	family	seed	forcing	nx	dt_s	duration_s	displacement_m	role
+screen	bt__bb10km_s42	bt	broadband	42	off	1024	50.0	500000.0	10000.0	Initial screen: detect rapid growth and measure provisional mode drift
+screen	ld2000_d000__bb10km_s42	ld2000_d000	broadband	42	off	1024	50.0	500000.0	10000.0	Initial screen: detect rapid growth and measure provisional mode drift
+screen	ld2000_dp050__bb10km_s42	ld2000_dp050	broadband	42	off	1024	50.0	500000.0	10000.0	Initial screen: detect rapid growth and measure provisional mode drift
+screen	ld4000_d000__bb10km_s42	ld4000_d000	broadband	42	off	1024	50.0	500000.0	10000.0	Initial screen: detect rapid growth and measure provisional mode drift
+screen	ld4000_dp050__bb10km_s42	ld4000_dp050	broadband	42	off	1024	50.0	500000.0	10000.0	Initial screen: detect rapid growth and measure provisional mode drift
+screen	ld4000_dp100__bb10km_s42	ld4000_dp100	broadband	42	off	1024	50.0	500000.0	10000.0	Initial screen: detect rapid growth and measure provisional mode drift
+expanded	ld0500_dn050__bb10km_s42	ld0500_dn050	broadband	42	off	1024	50.0	500000.0	10000.0	Expand parameter coverage after reviewing the initial six
+expanded	ld0500_d000__bb10km_s42	ld0500_d000	broadband	42	off	1024	50.0	500000.0	10000.0	Expand parameter coverage after reviewing the initial six
+expanded	ld0500_dp050__bb10km_s42	ld0500_dp050	broadband	42	off	1024	50.0	500000.0	10000.0	Expand parameter coverage after reviewing the initial six
+expanded	ld0500_dp100__bb10km_s42	ld0500_dp100	broadband	42	off	1024	50.0	500000.0	10000.0	Expand parameter coverage after reviewing the initial six
+expanded	ld1000_dn050__bb10km_s42	ld1000_dn050	broadband	42	off	1024	50.0	500000.0	10000.0	Expand parameter coverage after reviewing the initial six
+expanded	ld1000_d000__bb10km_s42	ld1000_d000	broadband	42	off	1024	50.0	500000.0	10000.0	Expand parameter coverage after reviewing the initial six
+expanded	ld1000_dp050__bb10km_s42	ld1000_dp050	broadband	42	off	1024	50.0	500000.0	10000.0	Expand parameter coverage after reviewing the initial six
+expanded	ld1000_dp100__bb10km_s42	ld1000_dp100	broadband	42	off	1024	50.0	500000.0	10000.0	Expand parameter coverage after reviewing the initial six
+expanded	ld2000_dn050__bb10km_s42	ld2000_dn050	broadband	42	off	1024	50.0	500000.0	10000.0	Expand parameter coverage after reviewing the initial six
+expanded	ld2000_dp100__bb10km_s42	ld2000_dp100	broadband	42	off	1024	50.0	500000.0	10000.0	Expand parameter coverage after reviewing the initial six
+expanded	ld4000_dn050__bb10km_s42	ld4000_dn050	broadband	42	off	1024	50.0	500000.0	10000.0	Expand parameter coverage after reviewing the initial six
+numerics	ld2000_dp050__dt25	ld2000_dp050	broadband	42	off	1024	25.0	500000.0	10000.0	Time-step sensitivity relative to screen
+numerics	ld2000_dp050__nx2048_dt25	ld2000_dp050	broadband	42	off	2048	25.0	500000.0	10000.0	Combined mesh and cutoff-dissipation refinement; not fixed-nu convergence
+numerics	ld2000_dp050__amplitude5km	ld2000_dp050	broadband	42	off	1024	50.0	500000.0	5000.0	Linearity and diagnostic floor relative to screen
+numerics	ld2000_dp050__weaker_damping	ld2000_dp050	broadband	42	off	1024	50.0	500000.0	10000.0	Tenfold lower physical hyperviscosity at fixed grid
+numerics	ld4000_dp050__dt25	ld4000_dp050	broadband	42	off	1024	25.0	500000.0	10000.0	Time-step sensitivity relative to screen
+numerics	ld4000_dp050__nx2048_dt25	ld4000_dp050	broadband	42	off	2048	25.0	500000.0	10000.0	Combined mesh and cutoff-dissipation refinement; not fixed-nu convergence
+numerics	ld4000_dp050__amplitude5km	ld4000_dp050	broadband	42	off	1024	50.0	500000.0	5000.0	Linearity and diagnostic floor relative to screen
+numerics	ld4000_dp050__weaker_damping	ld4000_dp050	broadband	42	off	1024	50.0	500000.0	10000.0	Tenfold lower physical hyperviscosity at fixed grid

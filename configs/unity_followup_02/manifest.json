@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "status": "optional_old_pilot_checks_not_the_primary_lower_layer_stability_study",
+  "paths_relative_to": "project_root",
+  "automatic_submission": false,
+  "baseline": {
+    "path": "runs/from-unity/job-66043705.3QDB36N0/results/config.toml",
+    "job_id": 66043705,
+    "sha256": "719ce22322df1ca24dc9c5b8778fef6fb3e59594197fa4f2934acaccc03b170a",
+    "completed_time_s": 1000000.0,
+    "experiment_name_preserved_by_timestep_check": "unity-maintenance-unforced"
+  },
+  "configs": [
+    {
+      "path": "configs/unity_followup_02/unforced_timestep_check.toml",
+      "sha256": "0f629d34ff3a9189fb3614e1b6567980a162640f247ae63be2ee6583087696c0",
+      "status": "prepared_next_numerical_check",
+      "purpose": "Repeat the downloaded unforced 1e6 s trajectory with only the nominal timestep halved, retaining the original experiment name and initial state.",
+      "differences_from_downloaded_unforced": {
+        "numerics.dt_s": {
+          "from": 100.0,
+          "to": 50.0
+        }
+      }
+    },
+    {
+      "path": "configs/unity_followup_02/mode_selection_broadband.toml",
+      "sha256": "d5c197f3c97acae2e83be4c5a804834ccdc113fa8cfe4aca8e8ef9ab3ccb576f",
+      "status": "prepared_for_later_review_do_not_submit_automatically",
+      "purpose": "Probe growth and competition among modes 1:32 about the existing unforced jet and cyclone, after review of the timestep comparison and mode diagnostics.",
+      "differences_from_downloaded_unforced": {
+        "experiment.name": {
+          "from": "unity-maintenance-unforced",
+          "to": "unity-broadband-selection"
+        },
+        "experiment.purpose": {
+          "from": "maintenance",
+          "to": "selection"
+        },
+        "initial.displacement_m": {
+          "from": 100000.0,
+          "to": 10000.0
+        },
+        "initial.m_max": {
+          "from": 12,
+          "to": 32
+        },
+        "initial.perturbation": {
+          "from": "mode",
+          "to": "broadband"
+        },
+        "numerics.dt_s": {
+          "from": 100.0,
+          "to": 50.0
+        },
+        "output.m_max": {
+          "from": 12,
+          "to": 32
+        }
+      }
+    }
+  ],
+  "shared_parameters": {
+    "seed": 42,
+    "grid_nx": 1024,
+    "duration_s": 1000000.0,
+    "deformation_radius_m": 2000000.0,
+    "deep_jet_speed_m_s": 50.0,
+    "convection_enabled": false,
+    "nominal_circuit_period_s": 942477.7960769379,
+    "nominal_jet_circuits": 1.0610329539459689
+  },
+  "timestep_comparison": {
+    "only_changed_parameter": "numerics.dt_s: 100 s -> 50 s",
+    "matched_initial_state": true,
+    "matched_initial_state_basis": "All initialization parameters and the seed are identical; nominal timestep does not enter initialization.",
+    "comparison": "Use matching saved times over 1e6 s, compare physical fields, invariants and mode-growth diagnostics, and account for missing jet-trace modes when jet coverage is incomplete.",
+    "limitation": "Agreement over the prior forced 20000 s benchmark does not establish long-time unforced timestep insensitivity or a convergence order."
+  },
+  "selection_caveats": [
+    "Prepared for later review only. Do not automatically submit this file together with the timestep check.",
+    "This changes the initial perturbation spectrum and amplitude around an already prescribed jet and central cyclone; it does not test emergence of those structures from rest.",
+    "Convection remains disabled. This is not a storm-driven emergence experiment and does not isolate convection or finite-deformation-radius stabilization.",
+    "Broadband initialization uses modes 1 through 32 with random phases from seed 42 and mode-dependent radial envelopes. Equal nominal displacement coefficients are not an equal-energy or universally unbiased perturbation spectrum.",
+    "The configured 10000 m displacement is divided by sqrt(32) in each streamfunction perturbation coefficient; it is not a promise that a diagnosed jet-contour RMS displacement equals 10000 m.",
+    "initial.mode remains 6 as an unused schema-required value; initial.perturbation=broadband makes the initializer use initial.m_max instead.",
+    "One seed and about 1.061 nominal circuits cannot establish robust preference for mode six or long-term stabilization; review phase/seed, amplitude, resolution, boundary and duration sensitivity.",
+    "Runtime jet-contour modal diagnostics can become undefined when the traced jet leaves the search annulus or loses full angular coverage. Inspect the physical fields and use valid complementary mode diagnostics before interpreting selection.",
+    "Use a new output directory for every run. The JSON manifest is metadata, not a runnable model configuration."
+  ],
+  "current_evidence": {
+    "prior_short_timestep_comparison": {
+      "baseline_job": 66041133,
+      "dt50_job": 66042296,
+      "duration_s": 20000.0,
+      "final_velocity_relative_l2_difference": 1.2126704135501321e-08,
+      "scope": "Short forced benchmark only."
+    },
+    "gpu_restart": {
+      "job_id": 66043703,
+      "report": "runs/from-unity/restart-check-66043703.SEWZhnZ9/results/report.toml",
+      "passed": true,
+      "final_field_differences_zero": true,
+      "scope": "Same-device fresh-model checkpoint continuation within one allocation over 20000 s; not cross-node or long-time chaotic trajectory equivalence."
+    },
+    "maintenance_pair": {
+      "forced_job": 66043704,
+      "unforced_job": 66043705,
+      "completed_time_s": 1000000.0,
+      "physical_field_snapshots_checked_per_run": 11,
+      "physical_fields_all_finite": true,
+      "checkpoint_artifact_audit": "analysis/unity-maintenance-01/checkpoint-artifact-audit.toml",
+      "field_check_directories": [
+        "analysis/unity-maintenance-01/field-checks-forced",
+        "analysis/unity-maintenance-01/field-checks-unforced"
+      ],
+      "runtime_modal_nonfinite_rows": {
+        "forced": 43,
+        "unforced": 41
+      },
+      "runtime_modal_nonfinite_rows_explained_by_incomplete_coverage": true,
+      "scope": "Both runs began with a prescribed m=6 perturbation. Artifact consistency and completion do not establish selective hexagon stabilization or spontaneous mode-six emergence."
+    }
+  },
+  "configuration_validation": {
+    "method": "SaturnPolarQG.load_config on the two explicit TOML paths; no model allocation or integration.",
+    "status": "passed",
+    "julia_version": "1.10.12",
+    "models_allocated": false,
+    "integration_performed": false
+  },
+  "priority_note": "The user prioritizes lower-layer stabilization using the 2024 Pizzo\u2013Salmon family. These prepared files do not test that hypothesis and have not been submitted."
+}

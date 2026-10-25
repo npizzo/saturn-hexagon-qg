@@ -1,0 +1,35 @@
+candidates = []
+exact_2024_family = false
+initializer = "existing annular jet plus central cyclone"
+manifest_sha256 = "d55feb3c66021f9ec2322d58d01188fe88009d329b0be0fd45123e50526a5838"
+pilot_sha256 = "719ce22322df1ca24dc9c5b8778fef6fb3e59594197fa4f2934acaccc03b170a"
+schema_version = 1
+source_sha256 = "50ba99a095bdf94bcd2c331dbffb0da6974b8752ef5b409cd25e4c4699fb8709"
+
+[frame]
+assumption = "positive theta eastward; configured rotation defines coordinate frame"
+model_rotation_rate_s = 0.000165
+observed_2008_2014_period_s = 38363.01
+observed_angular_speed_model_s = -1.217614124137122e-6
+observed_speed_at_model_ring_m_s = -18.26421186205683
+status = "conditional comparison; register to the goflow epoch and coordinate convention"
+system_iii_period_s = 38362.4
+
+[interpretation]
+diagnostics = "runtime jet phase is provisional; validate a connected jet and field coefficients"
+forcing = "matched seeds do not guarantee identical accepted injections or energy input"
+long_claim = "finite-amplitude persistence and mode competition, followed by matched convection"
+nominal_jet_circuit_s = 942477.7960769379
+numerics = "2048 keeps cutoff damping time fixed; physical nu decreases approximately 256-fold"
+physical_regime = "physics-audit.tsv: axisymmetric base hprime/H=(psi-psid)/(2 Omega LD^2), zero-domain-mean convention; excludes perturbations/evolution; order-one values violate small-displacement QG"
+screen_claim = "rapid-growth screen; a quiet 500000-s trajectory is not stability"
+
+[[stages]]
+count = 6
+name = "screen"
+[[stages]]
+count = 11
+name = "expanded"
+[[stages]]
+count = 8
+name = "numerics"

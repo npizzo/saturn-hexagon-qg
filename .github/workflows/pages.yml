@@ -1,0 +1,43 @@
+name: Publish gallery
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'gallery/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out reviewed files
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Check static gallery contents
+        run: python3 scripts/check_gallery.py gallery
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload gallery only
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: gallery
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "title": "Convection and a seeded hexagonal jet",
+  "description": "Two runs of 1,000,000 simulated seconds begin from the same sixfold jet, with convection on and off. Both roll up into lobes and vortices; this pair does not establish a maintained hexagonal jet.",
+  "runs": [
+    {
+      "name": "unity-maintenance-forced",
+      "run_id": "unity-maintenance-forced-73c33a46",
+      "page": "runs/unity-maintenance-forced-73c33a46/index.html",
+      "summary": "runs/unity-maintenance-forced-73c33a46/summary.json",
+      "source_sha256": "50ba99a095bdf94bcd2c331dbffb0da6974b8752ef5b409cd25e4c4699fb8709",
+      "input_config_sha256": "73c33a461175cdfb20b4c40f3f5c0b877652086343ca6f15f8464193b5b6e6b8",
+      "snapshot_count": 11,
+      "end_s": 1000000.0
+    },
+    {
+      "name": "unity-maintenance-unforced",
+      "run_id": "unity-maintenance-unforced-719ce223",
+      "page": "runs/unity-maintenance-unforced-719ce223/index.html",
+      "summary": "runs/unity-maintenance-unforced-719ce223/summary.json",
+      "source_sha256": "50ba99a095bdf94bcd2c331dbffb0da6974b8752ef5b409cd25e4c4699fb8709",
+      "input_config_sha256": "719ce22322df1ca24dc9c5b8778fef6fb3e59594197fa4f2934acaccc03b170a",
+      "snapshot_count": 11,
+      "end_s": 1000000.0
+    }
+  ],
+  "shared_color_limits": {
+    "relative_vorticity_s_inverse": [
+      -0.00010768178068682695,
+      0.00010768178068682695
+    ],
+    "speed_m_s": [
+      0.0,
+      106.42140722486624
+    ],
+    "scope": "all supplied runs; field limits use all saved science-disk frames, mode limit uses all diagnostics",
+    "mode_display_floor_m": 10.0,
+    "mode_amplitude_max_m": 3116641.4422571496
+  },
+  "media_policy": "Actual saved frames only; optional MP4 uses equal display durations with no temporal interpolation."
+}

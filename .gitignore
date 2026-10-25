@@ -1,0 +1,25 @@
+# Large or machine-specific research state
+/runs/
+/runtime/
+/.unity/
+/.julia/
+/analysis/
+/work/
+__pycache__/
+*.pyc
+*.jld2
+*.h5
+*.hdf5
+*.nc
+*.tar
+*.tar.gz
+*.zip
+*.partial
+*.out
+*.err
+.DS_Store
+.env
+.env.*
+*.key
+*.pem
+LocalPreferences.toml

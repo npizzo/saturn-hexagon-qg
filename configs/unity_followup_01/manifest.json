@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "status": "short_timestep_comparison_reviewed_gpu_restart_pending",
+  "description": "Reviewed follow-up configurations. Timestep comparison completed on Unity; GPU restart gate and longer pair are prepared, not yet run.",
+  "paths_relative_to": "project_root",
+  "baseline": {
+    "path": "configs/unity_benchmark.toml",
+    "sha256": "208e69674755a8796241c2d3ef6c4387dffedd4bcb2a6088f7ab260b1cac93a9"
+  },
+  "configs": [
+    {
+      "path": "configs/unity_followup_01/timestep_check.toml",
+      "sha256": "ea55308e7973a3ec212aacc09d656fc84de64bf77265ae12af6a4691f47b17d5",
+      "differences_from_baseline": {
+        "numerics.dt_s": {
+          "from": 100.0,
+          "to": 50.0
+        }
+      }
+    },
+    {
+      "path": "configs/unity_followup_01/maintenance_forced.toml",
+      "sha256": "73c33a461175cdfb20b4c40f3f5c0b877652086343ca6f15f8464193b5b6e6b8",
+      "differences_from_baseline": {
+        "experiment.name": {
+          "from": "unity-benchmark",
+          "to": "unity-maintenance-forced"
+        },
+        "numerics.duration_s": {
+          "from": 20000.0,
+          "to": 1000000.0
+        },
+        "output.checkpoint_interval_s": {
+          "from": 10000.0,
+          "to": 100000.0
+        },
+        "output.diagnostic_interval_s": {
+          "from": 1000.0,
+          "to": 10000.0
+        },
+        "output.snapshot_interval_s": {
+          "from": 10000.0,
+          "to": 100000.0
+        }
+      }
+    },
+    {
+      "path": "configs/unity_followup_01/maintenance_unforced.toml",
+      "sha256": "719ce22322df1ca24dc9c5b8778fef6fb3e59594197fa4f2934acaccc03b170a",
+      "differences_from_baseline": {
+        "convection.enabled": {
+          "from": true,
+          "to": false
+        },
+        "experiment.name": {
+          "from": "unity-benchmark",
+          "to": "unity-maintenance-unforced"
+        },
+        "numerics.duration_s": {
+          "from": 20000.0,
+          "to": 1000000.0
+        },
+        "output.checkpoint_interval_s": {
+          "from": 10000.0,
+          "to": 100000.0
+        },
+        "output.diagnostic_interval_s": {
+          "from": 1000.0,
+          "to": 10000.0
+        },
+        "output.snapshot_interval_s": {
+          "from": 10000.0,
+          "to": 100000.0
+        }
+      }
+    }
+  ],
+  "maintenance_pair": {
+    "forced_path": "configs/unity_followup_01/maintenance_forced.toml",
+    "unforced_path": "configs/unity_followup_01/maintenance_unforced.toml",
+    "differences_forced_to_unforced": {
+      "convection.enabled": {
+        "from": true,
+        "to": false
+      },
+      "experiment.name": {
+        "from": "unity-maintenance-forced",
+        "to": "unity-maintenance-unforced"
+      }
+    },
+    "matched_initial_state": true,
+    "matched_initial_state_basis": "Identical grid, planet, physics, initial, boundary, numerics and experiment seed; experiment name is a label and convection.enabled affects subsequent impulses, not the initial fields.",
+    "seed": 42,
+    "grid_nx": 1024,
+    "duration_s": 1000000.0,
+    "nominal_dt_s": 100.0,
+    "nominal_circuit_definition": "2*pi*initial.jet_radius_m/initial.jet_speed_m_s; nominal profile values, not a fitted realized circulation period or pattern rotation period.",
+    "nominal_circuit_period_s": 942477.7960769379,
+    "nominal_jet_circuits": 1.0610329539459689,
+    "nominal_jet_circuits_rounded": 1.061,
+    "purpose": "Paired seeded-hexagon maintenance comparison; does not test spontaneous emergence or preferential selection of mode six."
+  },
+  "required_gates_before_scientific_interpretation": [
+    {
+      "gate": "timestep_check",
+      "action": "Compare the 50 s nominal timestep run against the 100 s Unity benchmark over their common 20,000 s interval, with realized output times and event timing accounted for.",
+      "status": "completed_short_time_sensitivity_small"
+    },
+    {
+      "gate": "gpu_restart",
+      "action": "Verify continuous versus checkpoint-resumed GPU evolution using the same configuration, source, runtime and dependencies; a successful checkpoint write alone is insufficient.",
+      "status": "validator_cpu_smoke_passed_gpu_pending"
+    }
+  ],
+  "remaining_limits": [
+    "One paired seed and about one nominal jet circuit do not establish long-term stabilization.",
+    "Forcing-radius, resolution, boundary and longer-duration sensitivity remain required for physical claims.",
+    "Both maintenance runs must start from the same initialized state rather than sharing a forced evolved checkpoint.",
+    "Choose a new output directory for every run, including the timestep check whose experiment.name intentionally matches the benchmark.",
+    "This JSON is metadata, not a runner configuration; submit only the three explicit TOML paths listed above."
+  ],
+  "configuration_validation": {
+    "method": "Existing SaturnPolarQG.load_config applied to each explicitly listed TOML; no model allocation or integration.",
+    "status": "passed"
+  },
+  "timestep_evidence": {
+    "baseline_job": 66041133,
+    "refined_job": 66042296,
+    "report": "analysis/unity-timestep-66042296/report.html",
+    "summary": "analysis/unity-timestep-66042296/timestep_summary.json",
+    "duration_s": 20000.0,
+    "final_velocity_relative_l2_difference": 1.2126704135501321e-08,
+    "final_runtime_m6_difference_m": -0.0011939728283323348,
+    "interpretation": "Very small short-time sensitivity supports retaining dt100 for the exploratory pair; no convergence-order or long-time claim."
+  }
+}
