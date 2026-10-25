@@ -5,9 +5,19 @@ result collections, beginning with `gallery/maintenance-01/`. The Pages workflow
 uploads only this directory. It checks the assets but does not run Julia,
 submit cluster jobs, read model checkpoints, or render simulations in Actions.
 
-**Unity completion does not automatically update this website.** A completed
-stage must be collected, transferred, rendered and published. The homepage
-records publication status rather than live scheduler status.
+The current project deployment has a **local scheduled sync every 30 minutes**.
+It checks the existing Unity Saturn campaign receipts, skips published attempts,
+collects completed stages, verifies provenance, renders the results and publishes
+new collections through the GitHub connector. Failed or incomplete results are
+held back. The sync does not submit or change simulations. It requires the local
+host to be online with the desktop app running and its existing Unity/GitHub
+access available; access failures need attention. The homepage records verified
+publication status rather than live scheduler status.
+
+This schedule is configured in the project chat, not installed by cloning this
+repository. The scripts below also support explicit manual publication. Unity
+completion alone is not publication: the collection, transfer, validation,
+rendering and deployment steps must all succeed.
 
 `gallery/stabilization-validation-01/` records the three 400-second CPU/GPU
 checks from Unity array 66081490. Their collection archive was verified against
