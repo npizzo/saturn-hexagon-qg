@@ -101,11 +101,26 @@ def resolution_flags(c, outer, nodes, first, last, growth, tolerance, grids):
     if c["initial"]["cyclone_speed_m_s"] != 0:
         scales["cyclone_radius"] = c["initial"]["cyclone_radius_m"]
     ld = c["physics"]["deformation_radius_m"]
+    if c["initial"].get("profile", "annular") == "rostami2017":
+        scales["core_regularization"] = c["initial"]["core_regularization_m"]
     if math.isfinite(ld):
         scales["deformation_radius"] = ld
         if c["physics"].get("deep_profile", "annular") == "annular" and c["physics"]["deep_jet_speed_m_s"] != 0:
             scales["deep_width"] = c["physics"]["deep_jet_width_m"]
     flags = ["unexamined_modes_above_%d" % last, "outer_boundary_sensitivity_not_tested"]
+    if c["initial"].get("profile", "annular") == "rostami2017":
+        flags.append("regularized_2017_qg_analogue_not_rsw_replication")
+        sample = np.linspace(0, outer, 2049)
+        base = radial.circular_base(c, sample, ld)
+        f = 2*c["planet"]["rotation_rate_s"]-base["gamma_code"]*sample**2/2
+        if np.min(f) <= 0:
+            flags.append("gamma_plane_coriolis_nonpositive_in_screen")
+        else:
+            rossby = np.max(np.abs(base["u_prime"]+base["omega"])/f)
+            if rossby >= 1:
+                flags.append("relative_vorticity_over_local_f_at_least_1_qg_not_asymptotically_valid_in_core")
+            elif rossby >= 0.3:
+                flags.append("relative_vorticity_over_local_f_at_least_0p3_qg_marginal")
     if first > 1:
         flags.append("omitted_low_azimuthal_modes")
     if len(grids) == 1:
@@ -188,13 +203,17 @@ def run(stage, output, nodes=(128,), modes=(1, 32), outer_radius=None, tolerance
                 "config": name, "config_sha256": digest, "provenance_sha256": provenance,
                 "deep_profile": c["physics"].get("deep_profile", "annular"),
                 "deep_match_fraction": c["physics"].get("deep_match_fraction", 1.0) if c["physics"].get("deep_profile", "annular") == "matched_upper" else None,
+                "deep_jet_fraction": c["physics"].get("deep_jet_fraction"),
+                "deep_cyclone_fraction": c["physics"].get("deep_cyclone_fraction"),
+                "initial_profile": c["initial"].get("profile", "annular"),
+                "core_regularization_m": c["initial"].get("core_regularization_m"),
                 "deformation_radius_m": c["physics"]["deformation_radius_m"],
                 "outer_radius_m": outer, "radial_nodes": list(nodes), "mode_range": [first, last],
                 "growth_tolerance_s": tolerance, "python": platform.python_version(),
                 "numpy": np.__version__, "scipy": scipy.__version__,
                 "method": "Second-order radial flux differences, phi(0)=phi(R)=0; exp[i*m*(theta-c*t)], growth=m*Im(c), angular pattern speed=Re(c). SI units and configured coordinate frame; no observational-frame fit.",
-                "assumptions": ["Untapered circular upper ring plus cyclone; configured nonaxisymmetric seed omitted.",
-                    "Matched deep flow is a fraction of the entire circular upper flow; it contains no polygonal seed.",
+                "assumptions": ["Configured untapered circular upper profile; nonaxisymmetric seed omitted. rostami2017 retains the declared origin and core regularizations.",
+                    "Matched deep flow follows the full circular upper flow or independently specified jet/cyclone fractions; it contains no polygonal seed.",
                     "No convection, sponge, or hyperviscosity; this is not the nonlinear periodic model.",
                     "Artificial circular outer Dirichlet boundary and second-order radial differences require independent sensitivity tests.",
                     "No growing eigenvalue in a finite mode band and grid is not a stability certificate. Eight cells per scale is a warning heuristic, not convergence.",

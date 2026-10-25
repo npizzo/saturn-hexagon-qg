@@ -65,7 +65,9 @@ def validation_fixture(path, config):
             "validator_sha256":gallery.sha256(path/"validate_stabilization.jl")}
     (path/"metadata.toml").write_text('\n'.join('%s = "%s"'%(key,value) for key,value in hashes.items())+'\n')
     profile=config["physics"].get("deep_profile","annular")
-    applies=profile=="matched_upper" and config["physics"].get("deep_match_fraction",1)==1 and math.isfinite(config["physics"]["deformation_radius_m"])
+    p=config["physics"]
+    applies=((profile=="matched_upper" and p.get("deep_match_fraction",1)==1) or
+             (profile=="matched_components" and p.get("deep_jet_fraction")==1 and p.get("deep_cyclone_fraction")==1)) and math.isfinite(p["deformation_radius_m"])
     lines=['schema_version = 1', 'passed = true', 'relative_l2_tolerance = 1e-8',
            'convection_enabled = false', 'deep_profile = "%s"'%profile,
            'private_path = "/Users/private/validation"']
@@ -90,6 +92,20 @@ class GalleryTests(unittest.TestCase):
         self.result=self.root/"result"
         self.config,self.fields,self.zeta=fixture(self.result)
     def tearDown(self):self.tmp.cleanup()
+
+    def test_rostami_metadata_preserves_physics_and_seed_band(self):
+        self.config["initial"].update(profile="rostami2017",core_regularization_m=500000,
+                                      perturbation="broadband",m_min=2,m_max=8)
+        self.config["physics"].update(deep_profile="matched_components",deep_jet_fraction=.5,deep_cyclone_fraction=0)
+        public=gallery.safe_config(self.config)
+        self.assertEqual(public["initial"]["profile"], "rostami2017")
+        rows=dict(gallery.metadata_rows({"public_config":public,"frames":[{"time_s":0},{"time_s":2}]}))
+        self.assertEqual(rows["Initial azimuthal mode(s)"], "2–8")
+        self.assertIn("M = 7",rows["Initial disturbance"])
+        self.assertIn("500",rows["Polar-core smoothing scale"])
+        self.assertIn("cyclone × 0",rows["Prescribed deep flow"])
+        self.config["initial"]["profile"]="/private/path"
+        with self.assertRaises(ValueError):gallery.safe_config(self.config)
 
     def test_analytic_vorticity_and_barotropic_limit(self):
         np.testing.assert_allclose(gallery.vorticity(self.fields,2),self.zeta,atol=1e-14)
@@ -186,6 +202,15 @@ class GalleryTests(unittest.TestCase):
             with self.subTest(replacement=new):
                 with self.assertRaises(ValueError):gallery.load_run(self.result)
         path.write_text(original)
+
+    def test_component_match_validation_cannot_skip_cancellation(self):
+        self.config["physics"].update(deep_profile="matched_components",deep_jet_fraction=1.0,deep_cyclone_fraction=1.0,deep_jet_speed_m_s=0.0)
+        self.config["initial"].update(profile="rostami2017",core_regularization_m=500000)
+        validation_fixture(self.result,self.config)
+        self.assertTrue(gallery.load_run(self.result)["validation"]["full_match_base"]["applicable"])
+        path=self.result/"cpu_gpu_validation.toml"
+        path.write_text(path.read_text().replace('applicable = true','applicable = false'))
+        with self.assertRaises(ValueError):gallery.load_run(self.result)
 
     def test_smoke_gallery_is_labelled_and_report_is_allowlisted(self):
         validation_fixture(self.result,self.config)

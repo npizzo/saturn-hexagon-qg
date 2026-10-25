@@ -5,9 +5,9 @@ For exp[i*m*(theta-c*t)], solve
     (Omega-c) L_m phi - (q_r/r) phi = 0,
     L_m = d_rr + d_r/r - m**2/r**2 - Ld**-2.
 The growth rate is m*Im(c), and Re(c) is angular pattern speed. The upper
-base is the configured analytic ring plus cyclone; the prescribed deep flow
-is an annular jet or a fraction of the full circular upper flow, including
-the core cyclone. Tapers, convection, sponge and hyperviscosity are absent
+base is the configured analytic ring plus cyclone or regularized 2017 fit; the prescribed deep flow
+is an annular jet, a fraction of the full circular upper flow, or independently
+matched jet and cyclone components. Tapers, convection, sponge and hyperviscosity are absent
 from this linear screen. The circular Dirichlet outer boundary is artificial
 and differs from the evolution model's periodic continuation.
 
@@ -29,6 +29,7 @@ import sys
 import numpy as np
 import scipy
 from scipy.linalg import eig, norm
+from scipy.optimize import brentq
 
 
 def ring_profile(r, speed, radius, width):
@@ -55,62 +56,205 @@ def cyclone_profile(r, speed, radius):
             factor * (r**3 * inverse_r2**2 - 3.0 * r * inverse_r2))
 
 
+def _positive_parameter(value, name):
+    if isinstance(value, bool) or not np.isfinite(value) or value <= 0:
+        raise ValueError(name + " must be positive and finite")
+    return float(value)
+
+
+def _fraction(value, name):
+    if isinstance(value, bool) or not np.isfinite(value) or value < 0:
+        raise ValueError(name + " must be finite and nonnegative")
+    return float(value)
+
+
+def rostami_parameters(initial):
+    """Physical profile parameters; no length or speed is rescaled with LD.
+
+    The Gaussian width is its 1/e half-width. cyclone_radius_m is the peak
+    radius of the *unregularized* paper fit. Both speeds specify the isolated
+    component's actual peak after polar regularization, not their sum's peak.
+    """
+    keys = ("jet_radius_m", "jet_width_m", "cyclone_radius_m", "core_regularization_m")
+    values = {key: _positive_parameter(initial[key], key) for key in keys}
+    for key in ("jet_speed_m_s", "cyclone_speed_m_s"):
+        value = initial[key]
+        if isinstance(value, bool) or not np.isfinite(value):
+            raise ValueError(key + " must be finite")
+        values[key] = float(value)
+    a, b = 0.42, 1.3
+    radius, width = values["jet_radius_m"], values["jet_width_m"]
+    length = values["cyclone_radius_m"] / (a/b)**(1/b)
+    epsilon = values["core_regularization_m"]
+    # Scale roots to O(1); this avoids the absolute-tolerance sensitivity of
+    # finding a dimensional radius directly and independently checks Julia.
+    def jet_derivative_scaled(x):
+        # Equivalent to U_r=0 after factoring positive exponentials.
+        return radius/width-x*np.tanh(2*x*radius/width)
+    upper = max(radius/width, 1.0)
+    while jet_derivative_scaled(upper) > 0:
+        upper *= 2
+    jet_peak = width*brentq(jet_derivative_scaled, max(0.0, radius/width-1.0), upper, xtol=5e-15)
+    shape_peak = (np.exp(-((jet_peak-radius)/width)**2)
+                  * -np.expm1(-4*jet_peak*radius/width**2))
+    def core_stationary(x):
+        r = x*length; s2 = r*r + epsilon*epsilon
+        return 1+(a-1)*r*r/s2-b*(r*r/s2)*(np.sqrt(s2)/length)**b
+    upper = max(1.0, epsilon/length)
+    while core_stationary(upper) > 0:
+        upper *= 2
+    core_peak = length*brentq(core_stationary, 0.0, upper, xtol=5e-15)
+    sc = np.hypot(core_peak, epsilon)
+    core_shape_peak = (core_peak/sc)*(sc/length)**a*np.exp(-(sc/length)**b)
+    if not (shape_peak > 0 and core_shape_peak > 0):
+        raise ValueError("Profile normalization underflow; incompatible profile scales")
+    values.update(alpha=a, beta=b, cyclone_length_m=length,
+                  jet_peak_radius_m=jet_peak, cyclone_peak_radius_m=core_peak,
+                  jet_coefficient=values["jet_speed_m_s"]/shape_peak,
+                  cyclone_coefficient=values["cyclone_speed_m_s"]/core_shape_peak)
+    return values
+
+
+def rostami_jet_profile(r, parameters):
+    """Odd Gaussian, peak normalized; returns U, U_r, U_rr.
+
+    The reflected Gaussian is a declared smooth-pole correction to the paper
+    profile. It is exponentially small near the reference jet, but necessary
+    to avoid a nonzero azimuthal velocity at r=0 on the Cartesian grid.
+    """
+    r = np.asarray(r)
+    radius, width = parameters["jet_radius_m"], parameters["jet_width_m"]
+    coefficient = parameters["jet_coefficient"]
+    minus, plus = (r-radius)/width, (r+radius)/width
+    em, ep = np.exp(-minus*minus), np.exp(-plus*plus)
+    u = coefficient*em*(-np.expm1(-4*r*radius/width**2))
+    up = coefficient*(-2*minus*em+2*plus*ep)/width
+    upp = coefficient*((4*minus**2-2)*em-(4*plus**2-2)*ep)/width**2
+    return u, up, upp
+
+
+def rostami_cyclone_profile(r, parameters):
+    """Smoothed published power-exponential core, peak normalized."""
+    r = np.asarray(r)
+    a, b = parameters["alpha"], parameters["beta"]
+    length, epsilon = parameters["cyclone_length_m"], parameters["core_regularization_m"]
+    s2 = r*r+epsilon*epsilon
+    sr = np.sqrt(s2)
+    angular = parameters["cyclone_coefficient"]*(sr/length)**a/sr*np.exp(-(sr/length)**b)
+    g = (a-1)/s2-b*sr**(b-2)/length**b
+    h = -2*(a-1)/s2**2-b*(b-2)*sr**(b-4)/length**b
+    return angular*r, angular*(1+r*r*g), angular*r*(3*g+r*r*(g*g+h))
+
+
+def rostami_angular_profiles(r, parameters):
+    """Cancellation-free (U/r, zeta_r/r) for jet and cyclone, including r=0."""
+    r = np.asarray(r, dtype=float)
+    radius, width = parameters["jet_radius_m"], parameters["jet_width_m"]
+    k = 2*radius/width**2
+    # A power series for sinh(z)/z and its derivatives in z^2 avoids
+    # subtracting singular terms in the vorticity gradient near the pole.
+    z = k*r
+    small = np.abs(z) < 0.1
+    omega_j, gradient_j = np.empty_like(r), np.empty_like(r)
+    rs = r[small]; t = z[small]**2
+    coeff = [1/math.factorial(2*n+1) for n in range(8)]
+    series = np.polynomial.polynomial.polyval(t, coeff)
+    first = np.polynomial.polynomial.polyval(t, [n*coeff[n] for n in range(1,8)])
+    second = np.polynomial.polynomial.polyval(t, [n*(n-1)*coeff[n] for n in range(2,8)])
+    factor = 2*parameters["jet_coefficient"]*k*np.exp(-(rs*rs+radius*radius)/width**2)
+    omega_j[small] = factor*series
+    gradient_j[small] = factor*(8*(-series/width**2+k*k*first)
+        +4*rs*rs*(series/width**4-2*k*k*first/width**2+k**4*second))
+    rl = r[~small]
+    u, up, upp = rostami_jet_profile(rl, parameters)
+    omega_j[~small] = u/rl
+    gradient_j[~small] = (upp+up/rl-u/rl**2)/rl
+    a, b = parameters["alpha"], parameters["beta"]
+    length, epsilon = parameters["cyclone_length_m"], parameters["core_regularization_m"]
+    s2 = r*r+epsilon*epsilon; sr = np.sqrt(s2)
+    omega_c = parameters["cyclone_coefficient"]*(sr/length)**a/sr*np.exp(-(sr/length)**b)
+    g = (a-1)/s2-b*sr**(b-2)/length**b
+    h = -2*(a-1)/s2**2-b*(b-2)*sr**(b-4)/length**b
+    gradient_c = omega_c*(4*g+r*r*(g*g+h))
+    return omega_j, gradient_j, omega_c, gradient_c
+
+
+def upper_profiles(initial, r):
+    """Component U,U_r,U_rr,Omega,zeta_r/r for the configured upper profile."""
+    profile = initial.get("profile", "annular")
+    if profile == "rostami2017":
+        parameters = rostami_parameters(initial)
+        jet = rostami_jet_profile(r, parameters)
+        core = rostami_cyclone_profile(r, parameters)
+        oj, gj, oc, gc = rostami_angular_profiles(r, parameters)
+        return (*jet, oj, gj), (*core, oc, gc)
+    if profile != "annular":
+        raise ValueError("initial.profile must be annular or rostami2017")
+    if "core_regularization_m" in initial:
+        raise ValueError("core_regularization_m applies only to rostami2017")
+    jet = ring_profile(r, initial["jet_speed_m_s"], initial["jet_radius_m"], initial["jet_width_m"])
+    core = cyclone_profile(r, initial["cyclone_speed_m_s"], initial["cyclone_radius_m"])
+    rj, wj = initial["jet_radius_m"], initial["jet_width_m"]
+    alpha = 1/(rj*wj); t = np.tanh((r*r-rj*rj)*alpha/2); s = 1-t*t
+    oj = (initial["jet_speed_m_s"]/rj)*s
+    gj = (initial["jet_speed_m_s"]/rj)*((4*t*t*s-2*s*s)*alpha**2*r*r-8*alpha*t*s)
+    rc = initial["cyclone_radius_m"]
+    oc = (initial["cyclone_speed_m_s"]/rc)*np.exp(0.5-r*r/(2*rc**2))
+    gc = oc*(r*r/rc**4-4/rc**2)
+    return (*jet, oj, gj), (*core, oc, gc)
+
+
 def circular_base(config, r, deformation_radius, deep_speed=None, match_fraction=None):
-    """Analytic base, including a cancellation-free q_r/r at the pole."""
+    """Analytic base, including cancellation-free q_r/r at the pole.
+
+    Component matching holds the upper wind fixed and changes only prescribed
+    deep velocity. Neither LD nor matching fractions rescale the upper fit.
+    """
     a, d = config["initial"], config["physics"]
     r = np.asarray(r, dtype=float)
     if np.any(r < 0) or not np.all(np.isfinite(r)):
         raise ValueError("r must contain finite nonnegative radii")
-    if not (deformation_radius > 0):
+    if isinstance(deformation_radius, bool) or not (deformation_radius > 0):
         raise ValueError("deformation radius must be positive or inf")
     profile = d.get("deep_profile", "annular")
-    if profile not in ("annular", "matched_upper"):
-        raise ValueError("deep_profile must be annular or matched_upper")
-    configured_fraction = d.get("deep_match_fraction", 1.0)
-    if isinstance(configured_fraction, bool) or not np.isfinite(configured_fraction) or configured_fraction < 0:
-        raise ValueError("deep_match_fraction must be finite and nonnegative")
+    if profile not in ("annular", "matched_upper", "matched_components"):
+        raise ValueError("deep_profile must be annular, matched_upper or matched_components")
+    if profile != "matched_components" and any(key in d for key in ("deep_jet_fraction", "deep_cyclone_fraction")):
+        raise ValueError("deep component fractions apply only to matched_components")
     if profile == "matched_upper":
+        configured_fraction = _fraction(d.get("deep_match_fraction", 1.0), "deep_match_fraction")
+        fraction = configured_fraction if match_fraction is None else _fraction(match_fraction, "deep_match_fraction")
+    elif "deep_match_fraction" in d or match_fraction is not None:
+        raise ValueError("deep_match_fraction applies only to matched_upper")
+    if profile in ("matched_upper", "matched_components"):
         if d.get("deep_jet_speed_m_s", 0.0) != 0:
-            raise ValueError("matched_upper requires deep_jet_speed_m_s=0; use deep_match_fraction")
+            raise ValueError(profile+" requires deep_jet_speed_m_s=0; use matching fractions")
         if deep_speed is not None:
-            raise ValueError("deep_speed cannot override matched_upper; use match_fraction")
-        fraction = configured_fraction if match_fraction is None else match_fraction
-        if isinstance(fraction, bool) or fraction is None or not np.isfinite(fraction) or fraction < 0:
-            raise ValueError("matched_upper requires a finite nonnegative deep_match_fraction")
+            raise ValueError("deep_speed cannot override matched deep flow; use matching fractions")
     else:
-        if "deep_match_fraction" in d:
-            raise ValueError("deep_match_fraction applies only to matched_upper")
-        if match_fraction is not None:
-            raise ValueError("match_fraction applies only to matched_upper")
-        deep_speed = d["deep_jet_speed_m_s"] if deep_speed is None else deep_speed
-        if not np.isfinite(deep_speed):
+        deep_speed = d.get("deep_jet_speed_m_s", 0.0) if deep_speed is None else deep_speed
+        if isinstance(deep_speed, bool) or not np.isfinite(deep_speed):
             raise ValueError("deep speed must be finite")
     f = 0.0 if math.isinf(deformation_radius) else deformation_radius**-2
-    u, up, upp = ring_profile(r, a["jet_speed_m_s"], a["jet_radius_m"], a["jet_width_m"])
-    uc, ucp, ucpp = cyclone_profile(r, a["cyclone_speed_m_s"], a["cyclone_radius_m"])
-    rj, wj = a["jet_radius_m"], a["jet_width_m"]
-    alpha = 1.0 / (rj * wj)
-    t = np.tanh((r * r - rj * rj) * alpha / 2.0)
-    s = 1.0 - t * t
-    omega_ring = (a["jet_speed_m_s"] / rj) * s
-    # Analytic (U'' + U'/r - U/r^2)/r; no subtraction of singular terms.
-    vort_grad_over_r = (a["jet_speed_m_s"] / rj) * (
-        (4.0 * t * t * s - 2.0 * s * s) * alpha**2 * r * r - 8.0 * alpha * t * s)
-    rc = a["cyclone_radius_m"]
-    omega_cyclone = (a["cyclone_speed_m_s"] / rc) * np.exp(0.5 - r * r / (2.0 * rc**2))
-    vort_grad_over_r += omega_cyclone * (r * r / rc**4 - 4.0 / rc**2)
-    omega = omega_ring + omega_cyclone
+    (u, up, upp, omega_ring, grad_ring), (uc, ucp, ucpp, omega_cyclone, grad_cyclone) = upper_profiles(a, r)
+    omega = omega_ring+omega_cyclone
+    vort_grad_over_r = grad_ring+grad_cyclone
     if profile == "matched_upper":
-        ud, omega_deep = fraction * (u + uc), fraction * omega
+        ud, omega_deep = fraction*(u+uc), fraction*omega
+    elif profile == "matched_components":
+        jet_fraction = _fraction(d["deep_jet_fraction"], "deep_jet_fraction")
+        core_fraction = _fraction(d["deep_cyclone_fraction"], "deep_cyclone_fraction")
+        ud = jet_fraction*u+core_fraction*uc
+        omega_deep = jet_fraction*omega_ring+core_fraction*omega_cyclone
     else:
         ud, _, _ = ring_profile(r, deep_speed, d["deep_jet_radius_m"], d["deep_jet_width_m"])
-        td = np.tanh((r * r - d["deep_jet_radius_m"]**2)
-                     / (2.0 * d["deep_jet_radius_m"] * d["deep_jet_width_m"]))
-        omega_deep = (deep_speed / d["deep_jet_radius_m"]) * (1.0 - td * td)
-    gamma = 2.0 * config["planet"]["rotation_rate_s"] / config["planet"]["radius_m"]**2
-    qr_over_r = vort_grad_over_r - f * (omega - omega_deep) - gamma
-    return {"r": r, "u": u + uc, "u_prime": up + ucp, "u_second": upp + ucpp,
-            "u_deep": ud, "omega": omega, "q_r": r * qr_over_r,
+        td = np.tanh((r*r-d["deep_jet_radius_m"]**2)/(2*d["deep_jet_radius_m"]*d["deep_jet_width_m"]))
+        omega_deep = (deep_speed/d["deep_jet_radius_m"])*(1-td*td)
+    gamma = 2.0*config["planet"]["rotation_rate_s"]/config["planet"]["radius_m"]**2
+    qr_over_r = vort_grad_over_r-f*(omega-omega_deep)-gamma
+    return {"r": r, "u": u+uc, "u_prime": up+ucp, "u_second": upp+ucpp,
+            "u_jet": u, "u_cyclone": uc, "omega_jet": omega_ring, "omega_cyclone": omega_cyclone,
+            "u_deep": ud, "omega": omega, "q_r": r*qr_over_r,
             "q_r_over_r": qr_over_r, "vorticity_gradient_over_r": vort_grad_over_r,
             "gamma_code": gamma}
 
@@ -202,7 +346,7 @@ def main(argv=None):
     config = load_config(args.config)
     lds = number_list(args.ld_values) if args.ld_values else [float(config["physics"]["deformation_radius_m"])]
     profile = config["physics"].get("deep_profile", "annular")
-    if profile not in ("annular", "matched_upper"):
+    if profile not in ("annular", "matched_upper", "matched_components"):
         parser.error("unknown deep_profile")
     if profile == "matched_upper":
         if args.deep_ratios is not None:
@@ -211,6 +355,10 @@ def main(argv=None):
         if any(v is None or isinstance(v, bool) or not np.isfinite(v) or v < 0 for v in fractions):
             parser.error("matched fractions must be finite and nonnegative")
         ratios, controls = [], fractions
+    elif profile == "matched_components":
+        if args.deep_ratios is not None or args.match_fractions is not None:
+            parser.error("matched_components uses the two configured fractions exactly; no CLI fraction overrides")
+        ratios, fractions, controls = [], [], [None]
     else:
         if args.match_fractions is not None:
             parser.error("--match-fractions requires deep_profile=matched_upper")
@@ -241,12 +389,15 @@ def main(argv=None):
         "python": platform.python_version(), "numpy": np.__version__, "scipy": scipy.__version__,
         "config": config, "outer_radius_m": args.outer_radius, "radial_nodes": resolutions,
         "deformation_radii_m": lds, "deep_profile": profile, "deep_ratios": ratios,
-        "deep_match_fractions": fractions, "mode_range": [first, last],
+        "deep_match_fractions": fractions,
+        "deep_jet_fraction": config["physics"].get("deep_jet_fraction"),
+        "deep_cyclone_fraction": config["physics"].get("deep_cyclone_fraction"),
+        "initial_profile": config["initial"].get("profile", "annular"), "mode_range": [first, last],
         "growth_tolerance_s": args.growth_tolerance,
         "method": "Second-order radial flux difference; sqrt(r)-weighted symmetric R^2 L_m; scipy generalized eigenproblem; exp[i*m*(theta-c*t)].",
         "assumptions": [
-            "Exact analytic untapered upper ring plus central cyclone; any configured nonaxisymmetric initial disturbance is omitted.",
-            "Lower layer is prescribed and steady: annular uses deep/upper ring coefficient; matched_upper multiplies the entire circular upper flow, including its core cyclone.",
+            "Exact configured untapered upper radial profile; nonaxisymmetric initial disturbance is omitted. rostami2017 includes the declared origin and core regularizations.",
+            "Lower layer is prescribed and steady: annular uses a deep/upper ring coefficient, matched_upper multiplies the circular upper flow, and matched_components multiplies jet and cyclone separately.",
             "Regular m>=1 origin condition phi(0)=0 and artificial circular outer Dirichlet condition phi(R)=0.",
             "Convection, sponge and hyperviscosity are absent from this inviscid linear calculation, regardless of configuration values.",
             "This circular outer boundary is not the Julia model's periodic outer continuation. Check outer-radius and radial-grid sensitivity.",
@@ -277,7 +428,10 @@ def main(argv=None):
                         spectra[key + "_leading_phi"] = result["leading_phi"]
                     row = {"spectrum_key": key, "deformation_radius_m": ld, "deep_profile": profile,
                            "deep_ratio": control if profile == "annular" else None, "deep_match_fraction": fraction,
-                           "deep_speed_m_s": speed, "radial_nodes": n, "outer_radius_m": args.outer_radius,
+                           "deep_speed_m_s": speed,
+                           "deep_jet_fraction": config["physics"].get("deep_jet_fraction"),
+                           "deep_cyclone_fraction": config["physics"].get("deep_cyclone_fraction"),
+                           "initial_profile": config["initial"].get("profile", "annular"), "radial_nodes": n, "outer_radius_m": args.outer_radius,
                            "m": mode, "leading_growth_rate_s": result["growth_rate_s"],
                            "leading_angular_pattern_speed_s": result["angular_pattern_speed_s"] if growing else None,
                            "leading_frequency_real_s": result["frequency_real_s"] if growing else None,

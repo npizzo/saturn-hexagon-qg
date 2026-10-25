@@ -35,8 +35,8 @@ SCHEMA = {
     "experiment": {"name", "purpose", "seed"},
     "grid": {"nx", "length_m"},
     "planet": {"radius_m", "rotation_rate_s"},
-    "physics": {"deformation_radius_m", "deep_jet_speed_m_s", "deep_jet_radius_m", "deep_jet_width_m", "deep_profile", "deep_match_fraction"},
-    "initial": {"jet_speed_m_s", "jet_radius_m", "jet_width_m", "cyclone_speed_m_s", "cyclone_radius_m", "perturbation", "displacement_m", "mode", "m_max"},
+    "physics": {"deformation_radius_m", "deep_jet_speed_m_s", "deep_jet_radius_m", "deep_jet_width_m", "deep_profile", "deep_match_fraction", "deep_jet_fraction", "deep_cyclone_fraction"},
+    "initial": {"jet_speed_m_s", "jet_radius_m", "jet_width_m", "cyclone_speed_m_s", "cyclone_radius_m", "perturbation", "displacement_m", "mode", "m_min", "m_max", "profile", "core_regularization_m"},
     "boundary": {"inner_radius_m", "outer_radius_m", "sponge_rate_s"},
     "numerics": {"dt_s", "duration_s", "hyper_order", "cutoff_damping_time_s", "cfl_limit"},
     "convection": {"enabled", "r_min_m", "r_max_m", "vortex_radius_m", "q_max_s", "bias_max", "psi_limit_m2_s", "interval_min_s", "interval_max_s"},
@@ -74,8 +74,11 @@ def safe_config(config):
             if key == "name":
                 value = public_name(value, "unnamed-run")
             elif key == "deep_profile":
-                if value not in {"annular", "matched_upper"}:
+                if value not in {"annular", "matched_upper", "matched_components"}:
                     raise ValueError("Unknown deep-flow profile")
+            elif key == "profile":
+                if value not in {"annular", "rostami2017"}:
+                    raise ValueError("Unknown initial-flow profile")
             elif key in ("purpose", "perturbation"):
                 if value not in {"maintenance", "selection", "emergence", "smoke", "validation", "screen", "benchmark", "none", "mode", "broadband"}:
                     continue
@@ -247,7 +250,10 @@ def validation_report(path, config, integrity, config_hash, diagnostics):
     deep_profile = physics.get("deep_profile", "annular")
     if report.get("deep_profile") != deep_profile:
         raise ValueError("CPU/GPU validation deep profile differs from the configuration")
-    applies = deep_profile == "matched_upper" and physics.get("deep_match_fraction", 1.0) == 1 and math.isfinite(physics["deformation_radius_m"])
+    matched = ((deep_profile == "matched_upper" and physics.get("deep_match_fraction", 1.0) == 1)
+               or (deep_profile == "matched_components" and physics.get("deep_jet_fraction") == 1
+                   and physics.get("deep_cyclone_fraction") == 1))
+    applies = matched and math.isfinite(physics["deformation_radius_m"])
     base = table(report, "full_match_base")
     if base.get("applicable") is not applies:
         raise ValueError("CPU/GPU full-match base check applicability differs from the configuration")
@@ -425,6 +431,9 @@ def format_number(value, unit=""):
 
 
 def deep_flow_label(physics):
+    if physics.get("deep_profile") == "matched_components":
+        return "Upper circular jet × %s; upper cyclone × %s" % (
+            format_number(physics["deep_jet_fraction"]), format_number(physics["deep_cyclone_fraction"]))
     if physics.get("deep_profile", "annular") == "matched_upper":
         return "Whole upper base × " + format_number(physics.get("deep_match_fraction", 1.0)) + " (jet + cyclone)"
     return "Annular jet " + format_number(physics["deep_jet_speed_m_s"], "m/s")
@@ -436,7 +445,7 @@ def metadata_rows(run):
     if initial["perturbation"] == "none":
         disturbance = "None"
     elif initial["perturbation"] == "broadband":
-        count = initial["m_max"]
+        count = initial["m_max"] - initial.get("m_min", 1) + 1
         disturbance = "Broadband; normalization d = %s km; per-mode parameter d/√M = %s km (M = %s); seed %s" % (
             format_number(initial["displacement_m"]/1000),
             format_number(initial["displacement_m"]/(1000*math.sqrt(count))), count, c["experiment"]["seed"])
@@ -449,12 +458,17 @@ def metadata_rows(run):
         ("Prescribed deep flow", deep_flow_label(p)),
         ("Jet radius / width", "%s / %s Mm" % (format_number(initial["jet_radius_m"]/1e6), format_number(initial["jet_width_m"]/1e6))),
         ("Initial disturbance", disturbance),
-        ("Initial azimuthal mode(s)", str(initial["mode"]) if initial["perturbation"] == "mode" else "1–%s" % initial["m_max"] if initial["perturbation"] == "broadband" else "None"),
+        ("Initial azimuthal mode(s)", str(initial["mode"]) if initial["perturbation"] == "mode" else "%s–%s" % (initial.get("m_min",1), initial["m_max"]) if initial["perturbation"] == "broadband" else "None"),
         ("Grid / timestep", "%s² / %s s" % (c["grid"]["nx"], format_number(numerical["dt_s"]))),
         ("Saved time span", "%s–%s days" % (format_number(run["frames"][0]["time_s"]/86400), format_number(run["frames"][-1]["time_s"]/86400))),
         ("Actual snapshots", str(len(run["frames"]))),
         ("Rotation rate", format_number(c["planet"]["rotation_rate_s"],"s⁻¹ (model frame)")),
     ]
+    if initial.get("profile") == "rostami2017":
+        rows.insert(0, ("Initial profile", "Rostami–Zeitlin–Spiga 2017 QG formation analogue; regularized polar core"))
+        rows.insert(1, ("Polar-core smoothing scale", format_number(initial["core_regularization_m"]/1000, "km")))
+        rows.insert(2, ("Cyclone peak speed", format_number(initial["cyclone_speed_m_s"], "m/s")))
+        rows.insert(3, ("Jet-width convention", "Gaussian 1/e half-width; differs from the generic annular profile"))
     if run.get("validation"):
         rows.insert(0, ("Run purpose", "Short CPU/GPU software validation"))
         rows.insert(1, ("Compared duration", format_number(run["validation"]["final_time_s"], "s")))

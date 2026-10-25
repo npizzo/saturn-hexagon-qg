@@ -30,17 +30,21 @@ cyclone_psi(r, U, R) = -U*R*exp(0.5-r^2/(2R^2))
 
 function initial_streamfunctions(c, x, y)
     a, d, b = c["initial"], c["physics"], c["boundary"]
+    get(a,"profile","annular") == "rostami2017" && return rostami_initial_streamfunctions(c,x,y)
     matched = get(d, "deep_profile", "annular") == "matched_upper"
+    components = get(d, "deep_profile", "annular") == "matched_components"
     psi = zeros(length(x), length(y)); psid = similar(psi); base = similar(psi)
     rng = MersenneTwister(c["experiment"]["seed"])
-    modes = a["perturbation"] == "none" ? Int[] : a["perturbation"] == "mode" ? [a["mode"]] : collect(1:a["m_max"])
+    modes = a["perturbation"] == "none" ? Int[] : a["perturbation"] == "mode" ? [a["mode"]] : collect(get(a,"m_min",1):a["m_max"])
     phases = a["perturbation"] == "mode" ? [0.0] : 2pi .* rand(rng, length(modes))
     amp = isempty(modes) ? 0.0 : a["displacement_m"]/sqrt(length(modes))
     for j in eachindex(y), i in eachindex(x)
         r = hypot(x[i], y[j]); theta = atan(y[j], x[i])
         w = smooth_window(r, b["inner_radius_m"], b["outer_radius_m"])
         base[i,j] = w*(ring_psi(r, a["jet_speed_m_s"], a["jet_radius_m"], a["jet_width_m"]) + cyclone_psi(r, a["cyclone_speed_m_s"], a["cyclone_radius_m"]))
-        psid[i,j] = matched ? 0.0 : w*ring_psi(r, d["deep_jet_speed_m_s"], d["deep_jet_radius_m"], d["deep_jet_width_m"])
+        psid[i,j] = components ? w*(d["deep_jet_fraction"]*ring_psi(r,a["jet_speed_m_s"],a["jet_radius_m"],a["jet_width_m"])+
+            d["deep_cyclone_fraction"]*cyclone_psi(r,a["cyclone_speed_m_s"],a["cyclone_radius_m"])) :
+            matched ? 0.0 : w*ring_psi(r, d["deep_jet_speed_m_s"], d["deep_jet_radius_m"], d["deep_jet_width_m"])
         perturb = 0.0
         rho = r/a["jet_radius_m"]; z = (r^2-a["jet_radius_m"]^2)/(2a["jet_radius_m"]*a["jet_width_m"])
         for (m, phase) in zip(modes, phases)
@@ -55,10 +59,48 @@ function initial_streamfunctions(c, x, y)
         # Prescribe the unperturbed ring AND cyclone, with the upper base's
         # taper and gauge. Never copy the initial nonaxisymmetric disturbance.
         psid .= get(d, "deep_match_fraction", 1.0) .* base
+    elseif components && d["deep_jet_fraction"] == d["deep_cyclone_fraction"]
+        psid .= d["deep_jet_fraction"] .* base
     else
         psid .-= mean(psid)
     end
     return psi, psid, base
+end
+
+function rostami_initial_streamfunctions(c, x, y)
+    a,d,b = c["initial"],c["physics"],c["boundary"]
+    p = rostami_profile(a)
+    table = rostami_streamfunctions(p,b["outer_radius_m"])
+    profile = get(d,"deep_profile","annular")
+    psi = zeros(length(x),length(y)); psid = similar(psi); base = similar(psi)
+    modes = a["perturbation"] == "none" ? Int[] : a["perturbation"] == "mode" ? [a["mode"]] : collect(get(a,"m_min",1):a["m_max"])
+    rng = MersenneTwister(c["experiment"]["seed"])
+    phases = a["perturbation"] == "mode" ? [0.0] : 2pi .* rand(rng,length(modes))
+    amp = isempty(modes) ? 0.0 : a["displacement_m"]/sqrt(length(modes))
+    for j in eachindex(y), i in eachindex(x)
+        r = hypot(x[i],y[j]); theta = atan(y[j],x[i])
+        window = smooth_window(r,b["inner_radius_m"],b["outer_radius_m"])
+        jet = radial_streamfunction(r,table;component=:jet)
+        core = radial_streamfunction(r,table;component=:cyclone)
+        base[i,j] = window*(jet+core)
+        psid[i,j] = profile == "matched_components" ?
+            window*(d["deep_jet_fraction"]*jet+d["deep_cyclone_fraction"]*core) :
+            profile == "matched_upper" ? 0.0 : window*ring_psi(r,d["deep_jet_speed_m_s"],d["deep_jet_radius_m"],d["deep_jet_width_m"])
+        perturb = 0.0
+        for (m,phase) in zip(modes,phases)
+            perturb -= amp*a["jet_speed_m_s"]*rostami_perturbation_envelope(r,a["jet_radius_m"],a["jet_width_m"],m)*cos(m*theta+phase)
+        end
+        psi[i,j] = base[i,j]+window*perturb
+    end
+    psi .-= mean(psi); base .-= mean(base)
+    if profile == "matched_upper"
+        psid .= get(d,"deep_match_fraction",1.0) .* base
+    elseif profile == "matched_components" && d["deep_jet_fraction"] == d["deep_cyclone_fraction"]
+        psid .= d["deep_jet_fraction"] .* base
+    else
+        psid .-= mean(psid)
+    end
+    return psi,psid,base
 end
 
 function build_simulation(c::AbstractDict; device="cpu")
@@ -84,7 +126,7 @@ function build_simulation(c::AbstractDict; device="cpu")
     project(a) = (ah = rfft(a); dealias!(ah, grid); irfft(ah, n))
     psid = project(psid)
     B = project(B)
-    if get(c["physics"], "deep_profile", "annular") == "matched_upper"
+    if get(c["physics"], "deep_profile", "annular") in ("matched_upper","matched_components")
         # Initial s is transformed/dealiased again by QG.set_q!. The pinned
         # library's cutoff mask is not exactly idempotent after a real-space
         # round trip at its conjugate cutoff edge. Apply the same two passes

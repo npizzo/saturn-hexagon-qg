@@ -1,0 +1,54 @@
+campaign = "rostami2017_regularized_qg_analogue"
+convection = "off in every case; evaluate unforced formation, persistence, drift and numerical sensitivity first"
+deep_flow = "psi_d = deep_jet_fraction * unperturbed jet streamfunction + deep_cyclone_fraction * unperturbed regularized cyclone streamfunction, with identical taper and gauge; prescribed, not evolving"
+manifest_sha256 = "d55feb3c66021f9ec2322d58d01188fe88009d329b0be0fd45123e50526a5838"
+paper_doi = "10.1016/j.icarus.2017.06.006"
+pilot_sha256 = "97070dc16e5d89ad53d48b1fcadca6f735bfc7695596ac86d3a6c6dcde68a038"
+schema_version = 1
+scope = "Reconstruct circular upper velocity profiles as balanced QG initial data; no mature hexagon is imported and no exact shallow-water reproduction is claimed."
+source_sha256 = "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797"
+
+[frame]
+positive_theta = "eastward assumption; register to goflow coordinates and epoch"
+reference_angular_speed_in_model_s = 3.782385875862864e-6
+reference_period_s = 38363.01
+rotation_rate_s = 0.00016
+
+[interpretation]
+duration = "3.125e6 seconds = 1000/f0, not 1000 inertial periods; finite persistence is not a stability theorem"
+normalization = "10 km is the displacement parameter; broadband coefficients are divided by sqrt(number of modes). At the jet, the nominal delta-psi/jet-speed RMS is 10 km / sqrt(2), not a measured contour displacement."
+numerics = "core/epsilon500km_nx2048 is the fixed-cutoff mesh check; numerics/nx2048_fixed_nu separates resolution from viscosity; outer taper differs from the paper's damping sponge"
+phase = "Measure drift only for a connected coherent jet; retain ambient PV and reference rotation and compare upper winds as well as phase speed"
+regime = "physics-audit.tsv is a declarative scale/time-step audit, not a QG-validity certification; inspect actual projected/evolved thickness and vorticity/f, especially the cyclone"
+regularization = "epsilon varies the inner-core model; compare epsilon250 and epsilon500 at nx2048 before attributing changes to core physics; do not extrapolate toward the singular fit as physical convergence"
+
+[[stages]]
+count = 3
+name = "validation"
+[[stages]]
+count = 3
+name = "controls"
+[[stages]]
+count = 6
+name = "formation"
+[[stages]]
+count = 3
+name = "competition"
+[[stages]]
+count = 3
+name = "qg_regime"
+[[stages]]
+count = 4
+name = "deep"
+[[stages]]
+count = 2
+name = "deformation"
+[[stages]]
+count = 3
+name = "core"
+[[stages]]
+count = 4
+name = "numerics"
+[[stages]]
+count = 1
+name = "boundary"

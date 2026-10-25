@@ -44,12 +44,18 @@ function snapshot_fields(path)
     return NamedTuple{FIELD_KEYS}(Tuple(d[string(k)] for k in FIELD_KEYS))
 end
 
+function full_match_applicable(c)
+    d = c["physics"]
+    profile = get(d,"deep_profile","annular")
+    matched = profile == "matched_upper" ? get(d,"deep_match_fraction",1.0) == 1 :
+        profile == "matched_components" ? get(d,"deep_jet_fraction",NaN) == 1 && get(d,"deep_cyclone_fraction",NaN) == 1 : false
+    return matched && isfinite(d["deformation_radius_m"])
+end
+
 function check_full_match_base(c)
-    matched = get(c["physics"],"deep_profile","annular") == "matched_upper"
-    alpha = get(c["physics"],"deep_match_fraction",1.0)
-    if !matched || alpha != 1 || isinf(c["physics"]["deformation_radius_m"])
+    if !full_match_applicable(c)
         return Dict{String,Any}("applicable"=>false,
-            "reason"=>"Zero base thickness is asserted only for finite-LD matched_upper with fraction=1.")
+            "reason"=>"Zero base thickness is asserted only for finite LD with every upper-flow component fully matched.")
     end
     baseconfig = deepcopy(c)
     baseconfig["initial"]["perturbation"] = "none"
@@ -93,6 +99,7 @@ function validate(config_path, output)
         "validator_sha256"=>bytes2hex(sha256(read(@__FILE__))),
         "relative_l2_tolerance"=>FIELD_RTOL,"convection_enabled"=>c["convection"]["enabled"],
         "deep_profile"=>get(c["physics"],"deep_profile","annular"),
+        "initial_profile"=>get(c["initial"],"profile","annular"),
         "scope"=>"Short-time CPU/GPU agreement and applicable full-match base cancellation; not physical stability, spatial convergence, or long-time chaotic trajectory equivalence.")
     try
         cpu = build_simulation(c; device="cpu")

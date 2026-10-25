@@ -7,6 +7,7 @@ include("PolarDiagnostics.jl")
 using .Convection
 using .PolarDiagnostics
 include("Configuration.jl")
+include("RostamiProfiles.jl")
 include("Dynamics.jl")
 include("RunIO.jl")
 export load_config, validate_config, build_simulation, advance!, fields, invariants,

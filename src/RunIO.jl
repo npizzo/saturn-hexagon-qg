@@ -147,6 +147,7 @@ function run_experiment(config_path; output, device="cpu", resume=nothing)
         "units"=>"SI; planar distance in m; time s; velocity m/s; psi m2/s; s and totalpv 1/s",
         "pv_definition"=>"s=(Laplacian-LD^-2)*psi; totalpv=s+B; B=LD^-2*psid+continued gamma-plane PV",
         "deep_profile"=>get(c["physics"], "deep_profile", "annular"),
+        "initial_profile"=>get(c["initial"], "profile", "annular"),
         "physical_diagnostics"=>"r<=boundary.inner_radius_m; hprime/H=(psi-psid)/(2*rotation_rate_s*LD^2), undefined at infinite LD; h/H=1+hprime/H; zeta=s+psi/LD^2; f(r)=2*rotation_rate_s-(2*rotation_rate_s/radius_m^2)*r^2/2",
         "resume_from"=>resume === nothing ? "" : abspath(resume), "hyperviscosity"=>sim.nu)
     open(joinpath(output, "metadata.toml"), "w") do io; TOML.print(io, metadata); end

@@ -1,12 +1,17 @@
 # Readiness of the two published initializer routes
 
-Neither route is currently a verified, complete published-state initializer
-for this QG solver. Both are useful next steps, with different reconstruction
-requirements. These requirements **do not block the existing annular-jet
+Neither route supplies a verified **mature nonlinear equilibrium** for this
+QG solver. A separate, runnable Rostami2017 **formation** route now reconstructs
+the paper's circular initial velocity profiles, with explicit polar
+regularization and a velocity-preserving QG projection; see
+[rostami-benchmark.md](rostami-benchmark.md). That route does not require a saved
+mature field and must not be held behind the mature-equilibrium import gates below.
+The two mature-state routes retain different reconstruction requirements. These requirements **do not block the existing annular-jet
 campaign**, whose initializer and claims are documented separately in
 [unity-stabilization.md](unity-stabilization.md).
 
-No saved full state is available. The route forward is to reconstruct the
+No saved full mature state is available. For the Pizzo–Salmon family and any
+future mature-state import, the route forward is to reconstruct the
 fields from the published families and the supplied formula. In particular,
 the ambient PV/velocity continuation and Eulerian pattern rotation are
 **unknown family parameters to specify or solve for**, subject to interface,
@@ -19,7 +24,7 @@ be silently assumed.
 | Route | Established basis | Remaining gap |
 |---|---|---|
 | Pizzo–Salmon (2024) | Exact barotropic reference family; the supplied legacy code's unshifted active `q0` agrees with independently reconstructed planar PV under explicit conventions. | The legacy script's output convention, ambient construction, pattern rotation, spherical conventions and solver input semantics have not been verified as a complete equilibrium. |
-| Rostami–Zeitlin–Spiga (2017) | A persistent nonlinear hexagonal jet in one-layer rotating shallow water, with the central cyclone included. | A shallow-water state is not automatically a QG equilibrium; its complete fields and the changes introduced by QG projection must be established. |
+| Rostami–Zeitlin–Spiga (2017) | A persistent nonlinear hexagonal jet in one-layer rotating shallow water, with the central cyclone included. Its analytic circular initial profile now defines a separate regularized QG formation benchmark. | Importing the mature shallow-water hexagon still requires complete fields and a quantified QG projection; formation from a circular state does not. |
 
 For [Pizzo & Salmon (2024)](https://doi.org/10.1017/jfm.2024.932), the attached
 legacy code actively uses `n=2`, `eps=0.05`, `a0=0.3`: its symmetry is
@@ -40,7 +45,7 @@ conversion that preserves velocity will generally change the pressure/thickness
 balance and PV; preserving their shallow-water PV instead generally changes
 velocity. The nominal deformation radius alone does not specify the state.
 
-## Gates before treating either route as a QG reference state
+## Gates before treating a mature published polygon as a QG reference state
 
 1. **Construct a complete, reproducible field.** Specify the source version,
    parameters, epoch, phase, spatial domain and boundary conditions. Reconstruct
@@ -121,6 +126,6 @@ and the joint drift/wind constraint are in
 [experiment-design.md, section 7](experiment-design.md#7-lower-layer-stability-and-the-2024-exact-wave-family).
 
 Passing these gates would make a reconstructed state ready for the proposed
-stability and deep-flow experiments. This audit supplies the acceptance
-criteria; it does not add an initializer, certify a published state as runnable,
-or launch simulations.
+stability and deep-flow experiments. These gates concern mature-state imports; they do not certify a published
+polygon as a QG equilibrium. The separate circular formation initializer is
+documented in [rostami-benchmark.md](rostami-benchmark.md).

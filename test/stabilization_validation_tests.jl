@@ -21,6 +21,14 @@ include(joinpath(@__DIR__,"..","scripts","validate_stabilization.jl"))
     @test_throws ErrorException v.check_forcing_states(on,on,false)
     @test_throws ErrorException v.options(["config.toml"])
     @test_throws ErrorException v.options(["config.toml","--device","cpu"])
+    c = Dict("physics"=>Dict{String,Any}("deformation_radius_m"=>3.2e6,
+        "deep_profile"=>"matched_components","deep_jet_fraction"=>1.0,"deep_cyclone_fraction"=>1.0))
+    @test v.full_match_applicable(c)
+    c["physics"]["deep_cyclone_fraction"] = 0.0
+    @test !v.full_match_applicable(c)
+    c["physics"]["deep_cyclone_fraction"] = 1.0
+    c["physics"]["deformation_radius_m"] = Inf
+    @test !v.full_match_applicable(c)
     mktempdir() do dir
         write(joinpath(dir,"COMPLETED"),"400.0\n")
         write(joinpath(dir,"CPU_GPU_VALIDATION_PASSED"),"stale\n")

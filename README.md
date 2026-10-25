@@ -9,6 +9,24 @@ with the observed pattern drift and upper winds.
 [Model](docs/model.md) · [Experiment protocol](docs/experiments-01.md) ·
 [Gallery workflow](docs/gallery.md)
 
+## Rostami–Zeitlin–Spiga 2017 benchmark
+
+The [2017 formation benchmark](docs/rostami-benchmark.md) reconstructs the
+paper's circular jet and cyclone as a velocity-preserving QG analogue. It uses
+a smooth polar core, independent prescribed deep-jet and deep-cyclone strengths,
+and both sixfold and competing-mode perturbations. The staged
+[Unity instructions](docs/unity-rostami.md) start with software validation and
+circular controls before 3.125-million-second formation runs. These are prepared
+experiments, not evidence that QG reproduces the paper's shallow-water hexagon.
+The [local verification record](docs/rostami-validation.md) reports the tests,
+initialization residuals, physical-regime limits and preliminary linear screen.
+
+Use a new `saturn-hexagon-qg-rostami-01` checkout and the existing Unity Julia
+runtime. Previous campaigns remain tied to their original release commits:
+their frozen provenance is intentionally not updated to this source. Never
+resume an earlier checkpoint into this release. No output appears in the
+gallery until results have been collected, rendered, checked and published.
+
 ## Current results
 
 The first gallery contains two completed million-second Unity integrations,
@@ -70,6 +88,7 @@ checkpoints, runtime caches and cluster credentials are excluded.
 - [Lower-layer experiments and phase-speed requirements](docs/experiment-design.md)
 - [Whole-profile stabilization strategy](docs/stabilization-strategy.md)
 - [Published-state reconstruction requirements](docs/published-state-readiness.md)
+- [2017 profile reconstruction and physical limitations](docs/rostami-benchmark.md)
 - [Observation comparison and goflow interface](docs/observations.md)
 - [Literature context](docs/literature.md)
 - [Historical initializer audit](docs/legacy-ic-audit.md)
