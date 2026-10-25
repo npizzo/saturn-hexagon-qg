@@ -462,7 +462,7 @@ def metadata_rows(run):
 
 
 def page(title, body, prefix):
-    return '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+html.escape(title)+'</title><link rel="stylesheet" href="'+prefix+'assets/style.css"></head><body>'+body+'<footer>Saturn polar QG · Saved simulation output · No model is run in this browser.</footer><script src="'+prefix+'assets/gallery.js" defer></script></body></html>\n'
+    return '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+html.escape(title)+'</title><link rel="stylesheet" href="'+prefix+'assets/style.css?v='+hashlib.sha256(CSS.encode()).hexdigest()[:12]+'"></head><body>'+body+'<footer>Saturn polar QG · Saved simulation output · No model is run in this browser.</footer><script src="'+prefix+'assets/gallery.js" defer></script></body></html>\n'
 
 
 CSS = """
