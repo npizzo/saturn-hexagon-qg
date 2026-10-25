@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "title": "Whole-profile lower layer: deformation and matching screen",
+  "description": "Nine 1024\u00b2 runs compare deformation radii of 2,000, 3,200 and 4,000 km with prescribed lower flows equal to 0, 50 or 100% of the upper circular jet and central cyclone. The same broadband upper-layer disturbance (modes 1\u201332, seed 42) evolves for 500,000 seconds in every case; convection is off. Matching applies to the circular base, not its disturbance. The unmatched 2,000-km case has an initial thickness-anomaly bound of about 0.315, requiring caution about the QG approximation. Completion does not establish a stable hexagon, convergence or agreement with observed drift.",
+  "runs": [
+    {
+      "name": "screen__ld2000_a000_w1000__bb10km_s42",
+      "run_id": "screen-ld2000-a000-w1000-bb10km-s42-b5a89674",
+      "page": "runs/screen-ld2000-a000-w1000-bb10km-s42-b5a89674/index.html",
+      "summary": "runs/screen-ld2000-a000-w1000-bb10km-s42-b5a89674/summary.json",
+      "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+      "input_config_sha256": "b5a89674225b41a36b1437971c84c7c204807a3caef06df9b0dbf82b18102e5d",
+      "snapshot_count": 11,
+      "end_s": 500000.0
+    },
+    {
+      "name": "screen__ld2000_a050_w1000__bb10km_s42",
+      "run_id": "screen-ld2000-a050-w1000-bb10km-s42-463ac26b",
+      "page": "runs/screen-ld2000-a050-w1000-bb10km-s42-463ac26b/index.html",
+      "summary": "runs/screen-ld2000-a050-w1000-bb10km-s42-463ac26b/summary.json",
+      "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+      "input_config_sha256": "463ac26b38050fa0be4c486b7e05dfc1ec1452c74fcbe6affb85c1cfbbb23d40",
+      "snapshot_count": 11,
+      "end_s": 500000.0
+    },
+    {
+      "name": "screen__ld2000_a100_w1000__bb10km_s42",
+      "run_id": "screen-ld2000-a100-w1000-bb10km-s42-6380383e",
+      "page": "runs/screen-ld2000-a100-w1000-bb10km-s42-6380383e/index.html",
+      "summary": "runs/screen-ld2000-a100-w1000-bb10km-s42-6380383e/summary.json",
+      "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+      "input_config_sha256": "6380383efb6cff441a32f523f513567c7de6446f2fe36c3b412fe7f4517f7e48",
+      "snapshot_count": 11,
+      "end_s": 500000.0
+    },
+    {
+      "name": "screen__ld3200_a000_w1000__bb10km_s42",
+      "run_id": "screen-ld3200-a000-w1000-bb10km-s42-2339cc99",
+      "page": "runs/screen-ld3200-a000-w1000-bb10km-s42-2339cc99/index.html",
+      "summary": "runs/screen-ld3200-a000-w1000-bb10km-s42-2339cc99/summary.json",
+      "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+      "input_config_sha256": "2339cc994dbcadcc91eebe350e77a6432f5f6e0652bb49c03fa5afdda35be3f2",
+      "snapshot_count": 11,
+      "end_s": 500000.0
+    },
+    {
+      "name": "screen__ld3200_a050_w1000__bb10km_s42",
+      "run_id": "screen-ld3200-a050-w1000-bb10km-s42-ed414071",
+      "page": "runs/screen-ld3200-a050-w1000-bb10km-s42-ed414071/index.html",
+      "summary": "runs/screen-ld3200-a050-w1000-bb10km-s42-ed414071/summary.json",
+      "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+      "input_config_sha256": "ed4140711b6dec05a27df2b4e61b5b817cbb28c2d56a21ab4d0355b9c8122535",
+      "snapshot_count": 11,
+      "end_s": 500000.0
+    },
+    {
+      "name": "screen__ld3200_a100_w1000__bb10km_s42",
+      "run_id": "screen-ld3200-a100-w1000-bb10km-s42-127ae8e0",
+      "page": "runs/screen-ld3200-a100-w1000-bb10km-s42-127ae8e0/index.html",
+      "summary": "runs/screen-ld3200-a100-w1000-bb10km-s42-127ae8e0/summary.json",
+      "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+      "input_config_sha256": "127ae8e0ee4a9c43408d8e2fbd4a5b51bafa0c2a005bb64a1f82bd91da13aa73",
+      "snapshot_count": 11,
+      "end_s": 500000.0
+    },
+    {
+      "name": "screen__ld4000_a000_w1000__bb10km_s42",
+      "run_id": "screen-ld4000-a000-w1000-bb10km-s42-f8182bc0",
+      "page": "runs/screen-ld4000-a000-w1000-bb10km-s42-f8182bc0/index.html",
+      "summary": "runs/screen-ld4000-a000-w1000-bb10km-s42-f8182bc0/summary.json",
+      "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+      "input_config_sha256": "f8182bc0b12c84ad0494b52cc86059bf926e8bbb4d4dd5854889de825f7535ec",
+      "snapshot_count": 11,
+      "end_s": 500000.0
+    },
+    {
+      "name": "screen__ld4000_a050_w1000__bb10km_s42",
+      "run_id": "screen-ld4000-a050-w1000-bb10km-s42-8bdda78a",
+      "page": "runs/screen-ld4000-a050-w1000-bb10km-s42-8bdda78a/index.html",
+      "summary": "runs/screen-ld4000-a050-w1000-bb10km-s42-8bdda78a/summary.json",
+      "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+      "input_config_sha256": "8bdda78a106f4d1121e21f83d8bf86387e255a908b21960e9833d270b7ec6731",
+      "snapshot_count": 11,
+      "end_s": 500000.0
+    },
+    {
+      "name": "screen__ld4000_a100_w1000__bb10km_s42",
+      "run_id": "screen-ld4000-a100-w1000-bb10km-s42-0c9d0cad",
+      "page": "runs/screen-ld4000-a100-w1000-bb10km-s42-0c9d0cad/index.html",
+      "summary": "runs/screen-ld4000-a100-w1000-bb10km-s42-0c9d0cad/summary.json",
+      "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+      "input_config_sha256": "0c9d0cada6d581de1d28e0ad4e1af8241fd4a24dbf8d812644827bc132a1e539",
+      "snapshot_count": 11,
+      "end_s": 500000.0
+    }
+  ],
+  "shared_color_limits": {
+    "relative_vorticity_s_inverse": [
+      -0.00010337620086230436,
+      0.00010337620086230436
+    ],
+    "speed_m_s": [
+      0.0,
+      112.72470943872179
+    ],
+    "mode_display_floor_m": 10.0,
+    "mode_amplitude_max_m": 584805.929990429,
+    "scope": "all supplied runs; field limits use all saved science-disk frames, mode limit uses all diagnostics"
+  },
+  "media_policy": "Actual saved frames only; optional MP4 uses equal display durations with no temporal interpolation."
+}

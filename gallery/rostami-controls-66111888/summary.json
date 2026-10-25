@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "title": "Rostami 2017 QG analogue: circular-flow controls",
+  "description": "Three unperturbed 1024\u00b2 controls evolve for 100,000 seconds: the circular jet alone, the reference central cyclone, and a stronger central cyclone. All use a resting deep layer, a 3,200-km deformation radius and no convection. These check the numerical evolution of the regularized circular QG base flows before perturbation and hexagon-formation experiments. The stronger cores can have order-one vorticity relative to the Coriolis parameter, limiting interpretation as controlled QG approximations. Completion does not establish perturbation stability, reproduce the shallow-water hexagon or fit the observed phase speed.",
+  "runs": [
+    {
+      "name": "controls__jet_only_axisymmetric",
+      "run_id": "controls-jet-only-axisymmetric-ccee472a",
+      "page": "runs/controls-jet-only-axisymmetric-ccee472a/index.html",
+      "summary": "runs/controls-jet-only-axisymmetric-ccee472a/summary.json",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "input_config_sha256": "ccee472a123dca9ac647499dbcefafb3f0ab85039db6529a4d8e9a8f4718bcfb",
+      "snapshot_count": 5,
+      "end_s": 100000.0
+    },
+    {
+      "name": "controls__reference_axisymmetric",
+      "run_id": "controls-reference-axisymmetric-0761f327",
+      "page": "runs/controls-reference-axisymmetric-0761f327/index.html",
+      "summary": "runs/controls-reference-axisymmetric-0761f327/summary.json",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "input_config_sha256": "0761f3277dece06b5b90c68afc8f749b3845c20b705c6a1f3124f76ff2a7a15d",
+      "snapshot_count": 5,
+      "end_s": 100000.0
+    },
+    {
+      "name": "controls__strong_core_axisymmetric",
+      "run_id": "controls-strong-core-axisymmetric-75e66476",
+      "page": "runs/controls-strong-core-axisymmetric-75e66476/index.html",
+      "summary": "runs/controls-strong-core-axisymmetric-75e66476/summary.json",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "input_config_sha256": "75e66476a319a9487698a7bc94d024cb49d06840899b947e0453c00027b9fa83",
+      "snapshot_count": 5,
+      "end_s": 100000.0
+    }
+  ],
+  "shared_color_limits": {
+    "relative_vorticity_s_inverse": [
+      -0.0007261664662543827,
+      0.0007261664662543827
+    ],
+    "speed_m_s": [
+      0.0,
+      204.79961514838314
+    ],
+    "mode_display_floor_m": 10.0,
+    "mode_amplitude_max_m": 3017.659836811012,
+    "scope": "all supplied runs; field limits use all saved science-disk frames, mode limit uses all diagnostics"
+  },
+  "media_policy": "Actual saved frames only; optional MP4 uses equal display durations with no temporal interpolation."
+}
