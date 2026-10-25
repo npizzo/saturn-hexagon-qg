@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "title": "Unity validation: whole-profile deep flow",
+  "description": "Three 400-second CPU/GPU checks on a 256\u00b2 grid. The barotropic, half-matched and fully matched cases all passed. These short runs verify implementation; they do not test hexagon persistence or spatial convergence.",
+  "runs": [
+    {
+      "name": "validation__bt_a000_w1000__gpu_smoke",
+      "run_id": "validation-bt-a000-w1000-gpu-smoke-5e9209bc",
+      "page": "runs/validation-bt-a000-w1000-gpu-smoke-5e9209bc/index.html",
+      "summary": "runs/validation-bt-a000-w1000-gpu-smoke-5e9209bc/summary.json",
+      "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+      "input_config_sha256": "5e9209bc8fcd22c688abfb4f19d3329392c2133cc8e85c102eac4c5a8dbf06b6",
+      "snapshot_count": 5,
+      "end_s": 400.0
+    },
+    {
+      "name": "validation__ld3200_a050_w1000__gpu_smoke",
+      "run_id": "validation-ld3200-a050-w1000-gpu-smoke-49cada7f",
+      "page": "runs/validation-ld3200-a050-w1000-gpu-smoke-49cada7f/index.html",
+      "summary": "runs/validation-ld3200-a050-w1000-gpu-smoke-49cada7f/summary.json",
+      "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+      "input_config_sha256": "49cada7fe2326eb7057d5a8b2359046277c2c47067cb050373d94f2847111a44",
+      "snapshot_count": 5,
+      "end_s": 400.0
+    },
+    {
+      "name": "validation__ld500_a100_w1000__gpu_smoke",
+      "run_id": "validation-ld500-a100-w1000-gpu-smoke-97adc3e8",
+      "page": "runs/validation-ld500-a100-w1000-gpu-smoke-97adc3e8/index.html",
+      "summary": "runs/validation-ld500-a100-w1000-gpu-smoke-97adc3e8/summary.json",
+      "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+      "input_config_sha256": "97adc3e857401c09dec3b5144768ae854f1256926bd8e029679deb40b6cc8f60",
+      "snapshot_count": 5,
+      "end_s": 400.0
+    }
+  ],
+  "shared_color_limits": {
+    "relative_vorticity_s_inverse": [
+      -8.362914182634477e-05,
+      8.362914182634477e-05
+    ],
+    "speed_m_s": [
+      0.0,
+      100.28759007188275
+    ],
+    "mode_display_floor_m": 10.0,
+    "mode_amplitude_max_m": 8789.805858749054,
+    "scope": "all supplied runs; field limits use all saved science-disk frames, mode limit uses all diagnostics"
+  },
+  "media_policy": "Actual saved frames only; optional MP4 uses equal display durations with no temporal interpolation.",
+  "collection_provenance": {
+    "unity_array_job_id": "66081490",
+    "stage": "validation",
+    "archive_sha256": "54e39721cc04f9307098823d8e0dc72f98348f6277e8480abd924d4e556a879b",
+    "archive_checksum_verified": true,
+    "publication_mode": "Collected, transferred, rendered and published; not a live Unity feed."
+  }
+}

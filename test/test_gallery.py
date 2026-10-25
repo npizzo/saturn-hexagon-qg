@@ -52,6 +52,37 @@ def fixture(path, name="test-run", amplitude=1):
     return config,fields,zeta
 
 
+def validation_fixture(path, config):
+    config["experiment"]["purpose"] = "smoke"
+    (path/"config.toml").write_text(gallery.toml_text(config))
+    (path/"src").mkdir()
+    (path/"src"/"model.jl").write_text("# Saved test model\n")
+    (path/"Manifest.toml").write_text("# Saved test manifest\n")
+    (path/"validate_stabilization.jl").write_text("# Saved test validator\n")
+    hashes={"source_sha256":gallery.source_digest(path/"src"),
+            "manifest_sha256":gallery.sha256(path/"Manifest.toml"),
+            "config_sha256":gallery.sha256(path/"config.toml"),
+            "validator_sha256":gallery.sha256(path/"validate_stabilization.jl")}
+    (path/"metadata.toml").write_text('\n'.join('%s = "%s"'%(key,value) for key,value in hashes.items())+'\n')
+    profile=config["physics"].get("deep_profile","annular")
+    applies=profile=="matched_upper" and config["physics"].get("deep_match_fraction",1)==1 and math.isfinite(config["physics"]["deformation_radius_m"])
+    lines=['schema_version = 1', 'passed = true', 'relative_l2_tolerance = 1e-8',
+           'convection_enabled = false', 'deep_profile = "%s"'%profile,
+           'private_path = "/Users/private/validation"']
+    lines.extend('%s = "%s"'%(key,value) for key,value in hashes.items())
+    lines.extend(['[final_clock]', 'time_s = 2.0', 'step = 20', 'events = 0', 'next_event_s = inf',
+                  '[full_match_base]', 'applicable = '+str(applies).lower()])
+    if applies:
+        lines.append('absolute_thickness_tolerance = 1e-11')
+        for device in ('cpu','gpu'):
+            lines.extend(['[full_match_base.%s]'%device, 'max_abs_hprime_over_H = 1e-15', 'min_h_over_H = 1.0'])
+    for phase in ("initial_errors", "final_errors"):
+        for field in gallery.FIELD_KEYS:
+            lines.extend(['[%s.%s]'%(phase,field), 'relative_l2 = 1e-12', 'maximum_absolute = 2e-12'])
+    (path/"cpu_gpu_validation.toml").write_text('\n'.join(lines)+'\n')
+    (path/"CPU_GPU_VALIDATION_PASSED").write_text("Short-time CPU/GPU validation passed.\n")
+
+
 class GalleryTests(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory()
@@ -101,6 +132,76 @@ class GalleryTests(unittest.TestCase):
         (self.result/"COMPLETED").write_text("2")
         (self.result/"Manifest.toml").write_text("not matching recorded hash")
         with self.assertRaises(ValueError):gallery.load_run(self.result)
+
+    def test_failed_validation_marker_rejected(self):
+        (self.result/"FAILED.txt").write_text("comparison failed")
+        with self.assertRaises(ValueError):gallery.load_run(self.result)
+
+    def test_smoke_requires_passed_validation_and_complete_inputs(self):
+        validation_fixture(self.result,self.config)
+        run=gallery.load_run(self.result)
+        self.assertEqual(run["public_config"]["experiment"]["purpose"],"smoke")
+        self.assertTrue(run["validation"]["passed"])
+        for filename in ("CPU_GPU_VALIDATION_PASSED", "cpu_gpu_validation.toml", "validate_stabilization.jl", "Manifest.toml"):
+            path=self.result/filename
+            saved=path.read_bytes();path.unlink()
+            with self.subTest(filename=filename):
+                with self.assertRaises(ValueError):gallery.load_run(self.result)
+            path.write_bytes(saved)
+        report=self.result/"cpu_gpu_validation.toml"
+        original=report.read_text()
+        alterations=(('passed = true','passed = false'),
+                     ('relative_l2 = 1e-12','relative_l2 = 2e-8'),
+                     ('relative_l2_tolerance = 1e-8','relative_l2_tolerance = 1.0'),
+                     ('time_s = 2.0','time_s = 1.0'),
+                     ('step = 20','step = 21'),
+                     ('events = 0','events = 1'),
+                     ('applicable = false','applicable = true'))
+        for old,new in alterations:
+            report.write_text(original.replace(old,new,1))
+            with self.subTest(replacement=new):
+                with self.assertRaises(ValueError):gallery.load_run(self.result)
+        report.write_text(original)
+
+    def test_smoke_report_hashes_match_saved_artifacts(self):
+        validation_fixture(self.result,self.config)
+        path=self.result/"cpu_gpu_validation.toml";original=path.read_text()
+        report=gallery.parse_toml(original)
+        for key in ("source_sha256","manifest_sha256","config_sha256","validator_sha256"):
+            path.write_text(original.replace(report[key],"f"*64))
+            with self.subTest(key=key):
+                with self.assertRaises(ValueError):gallery.load_run(self.result)
+        path.write_text(original)
+
+    def test_full_match_smoke_requires_base_thickness_cancellation(self):
+        self.config["physics"].update(deep_profile="matched_upper",deep_match_fraction=1.0,deep_jet_speed_m_s=0.0)
+        validation_fixture(self.result,self.config)
+        run=gallery.load_run(self.result)
+        self.assertTrue(run["validation"]["full_match_base"]["applicable"])
+        path=self.result/"cpu_gpu_validation.toml";original=path.read_text()
+        for old,new in (('max_abs_hprime_over_H = 1e-15','max_abs_hprime_over_H = 0.1'),
+                        ('min_h_over_H = 1.0','min_h_over_H = 0.8'),
+                        ('absolute_thickness_tolerance = 1e-11','absolute_thickness_tolerance = 1.0')):
+            path.write_text(original.replace(old,new,1))
+            with self.subTest(replacement=new):
+                with self.assertRaises(ValueError):gallery.load_run(self.result)
+        path.write_text(original)
+
+    def test_smoke_gallery_is_labelled_and_report_is_allowlisted(self):
+        validation_fixture(self.result,self.config)
+        output=self.root/"validation-gallery"
+        manifest=gallery.build_gallery([self.result],output,title="Software validation")
+        directory=output/"runs"/manifest["runs"][0]["run_id"]
+        summary=json.loads((directory/"summary.json").read_text())
+        self.assertEqual(summary["purpose"],"software_validation")
+        self.assertEqual(summary["cpu_gpu_validation"]["final_time_s"],2)
+        self.assertEqual(summary["cpu_gpu_validation"]["final_errors"]["psi"]["relative_l2"],1e-12)
+        self.assertIn("short software-validation runs",(output/"index.html").read_text())
+        self.assertIn("Software validation · CPU/GPU comparison passed",(directory/"index.html").read_text())
+        self.assertIn("does not test hexagon persistence",summary["interpretation"])
+        for path in output.rglob("*"):
+            if path.is_file() and path.suffix in (".html", ".json", ".toml", ".csv"):
+                self.assertNotIn("/Users/private",path.read_text())
 
     def test_refuses_overwrite_before_loading(self):
         output=self.root/"existing";output.mkdir();(output/"keep").write_text("untouched")

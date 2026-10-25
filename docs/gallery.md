@@ -5,6 +5,20 @@ result collections, beginning with `gallery/maintenance-01/`. The Pages workflow
 uploads only this directory. It checks the assets but does not run Julia,
 submit cluster jobs, read model checkpoints, or render simulations in Actions.
 
+**Unity completion does not automatically update this website.** A completed
+stage must be collected, transferred, rendered and published. The homepage
+records publication status rather than live scheduler status.
+
+`gallery/stabilization-validation-01/` records the three 400-second CPU/GPU
+checks from Unity array 66081490. Their collection archive was verified against
+SHA256 `54e39721cc04f9307098823d8e0dc72f98348f6277e8480abd924d4e556a879b`.
+They are software validation, separate from the longer scientific experiments.
+For `purpose = "smoke"`, the renderer verifies the saved validation report,
+success marker, configuration/source/dependency/validator hashes, and reported
+initial/final comparison tolerances before displaying validation success.
+Only an allowlisted summary of that report is published; raw run files remain
+in the research archive.
+
 ## From a cluster run to a local preview
 
 Run the simulations with the existing cluster launchers. For a completed Unity

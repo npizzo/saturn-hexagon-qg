@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "name": "validation__bt_a000_w1000__gpu_smoke",
+  "run_id": "validation-bt-a000-w1000-gpu-smoke-5e9209bc",
+  "status": "completed",
+  "start_s": 0.0,
+  "end_s": 400.0,
+  "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+  "manifest_sha256": "d55feb3c66021f9ec2322d58d01188fe88009d329b0be0fd45123e50526a5838",
+  "source_verified": true,
+  "manifest_verified": true,
+  "input_config_sha256": "5e9209bc8fcd22c688abfb4f19d3329392c2133cc8e85c102eac4c5a8dbf06b6",
+  "input_diagnostics_sha256": "589c7e0223d928e9897d10974c21101d1cedc74139c38dbbe612e5e566d72164",
+  "first_incomplete_tracker_time_s": null,
+  "mode_numbers": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32
+  ],
+  "snapshot_count": 5,
+  "frames": [
+    {
+      "file": "snapshot_000000000.jld2",
+      "time_s": 0.0,
+      "sha256": "d64c4094e0144f4449d5b9ee5a36da694373ad4f2424c2d79da937c7aeeda353",
+      "image": "frame_000.png"
+    },
+    {
+      "file": "snapshot_000000010.jld2",
+      "time_s": 100.0,
+      "sha256": "340b4da0df0d02473009282efa5299c852dc196609958897cad10de842dbcdae",
+      "image": "frame_001.png"
+    },
+    {
+      "file": "snapshot_000000020.jld2",
+      "time_s": 200.0,
+      "sha256": "2fd97901b7a8208ca9970dc5b7a58999c27c0e8522d438d779b75ed75d63e13e",
+      "image": "frame_002.png"
+    },
+    {
+      "file": "snapshot_000000030.jld2",
+      "time_s": 300.0,
+      "sha256": "fb20ad5b3ff4f9ae1b151c4c26d4c6796dd80aa531f493c120b177f554e55e53",
+      "image": "frame_003.png"
+    },
+    {
+      "file": "snapshot_000000040.jld2",
+      "time_s": 400.0,
+      "sha256": "05206d4c3b9196b8de4d4b9d00d5efef7b2d89f9bc4732e2a79b82b274d91a84",
+      "image": "frame_004.png"
+    }
+  ],
+  "shared_color_limits": {
+    "relative_vorticity_s_inverse": [
+      -8.362914182634477e-05,
+      8.362914182634477e-05
+    ],
+    "speed_m_s": [
+      0.0,
+      100.28759007188275
+    ],
+    "mode_display_floor_m": 10.0,
+    "mode_amplitude_max_m": 8789.805858749054,
+    "scope": "all supplied runs; field limits use all saved science-disk frames, mode limit uses all diagnostics"
+  },
+  "field_definition": "Relative vorticity = s + psi / LD^2; speed = sqrt(u^2+v^2).",
+  "orientation": "x = r cos(theta), y = r sin(theta); origin lower; positive theta counterclockwise in this north-polar view.",
+  "display": "Fields block-averaged to at most 512 cells per side for rendering only; masked outside science radius.",
+  "phase_policy": "No drift fit or temporal phase unwrapping in this gallery.",
+  "interpretation": "Short-time CPU/GPU agreement and applicable full-match base thickness cancellation. This does not test hexagon persistence, spatial convergence, or long-time stability.",
+  "purpose": "software_validation",
+  "cpu_gpu_validation": {
+    "schema_version": 1,
+    "passed": true,
+    "relative_l2_tolerance": 1e-08,
+    "input_report_sha256": "0e8fc606b3f880293b6423dbe49c962906065a1f8219878c0a2f108c96d0f464",
+    "source_sha256": "643bed1fcaca991c3097758251f0d5051acdab2ddfdf0a8f499e52497ec468bc",
+    "manifest_sha256": "d55feb3c66021f9ec2322d58d01188fe88009d329b0be0fd45123e50526a5838",
+    "config_sha256": "5e9209bc8fcd22c688abfb4f19d3329392c2133cc8e85c102eac4c5a8dbf06b6",
+    "validator_sha256": "ae099f598f4983ebf961e0baac1b857e32945cc7a147968375b7d80d7c53e847",
+    "initial_errors": {
+      "s": {
+        "relative_l2": 4.542759823645781e-16,
+        "maximum_absolute": 5.421010862427522e-20
+      },
+      "psi": {
+        "relative_l2": 3.1461440113256587e-16,
+        "maximum_absolute": 2.384185791015625e-07
+      },
+      "u": {
+        "relative_l2": 3.8044723606607605e-16,
+        "maximum_absolute": 4.263256414560601e-14
+      },
+      "v": {
+        "relative_l2": 3.76503815445115e-16,
+        "maximum_absolute": 4.263256414560601e-14
+      },
+      "totalpv": {
+        "relative_l2": 3.876115221360187e-16,
+        "maximum_absolute": 5.421010862427522e-20
+      }
+    },
+    "final_errors": {
+      "s": {
+        "relative_l2": 4.530817909202947e-16,
+        "maximum_absolute": 5.421010862427522e-20
+      },
+      "psi": {
+        "relative_l2": 3.1307346354803588e-16,
+        "maximum_absolute": 2.384185791015625e-07
+      },
+      "u": {
+        "relative_l2": 3.6241456417987306e-16,
+        "maximum_absolute": 4.263256414560601e-14
+      },
+      "v": {
+        "relative_l2": 3.89272914068401e-16,
+        "maximum_absolute": 4.263256414560601e-14
+      },
+      "totalpv": {
+        "relative_l2": 3.860852437477364e-16,
+        "maximum_absolute": 5.421010862427522e-20
+      }
+    },
+    "final_time_s": 400.0,
+    "steps": 40,
+    "convection_events": 0,
+    "full_match_base": {
+      "applicable": false
+    },
+    "scope": "Short-time CPU/GPU agreement and applicable full-match base thickness cancellation. This does not test hexagon persistence, spatial convergence, or long-time stability."
+  },
+  "public_config_sha256": "82f7a81fb031b4686721e877618d33953128fb9b385edc6d8eef1c7ced6d711c",
+  "public_diagnostics_sha256": "c7fc409d6817e899746b197969d99ab4cea968bb8670feaf5e20fe0c393bc834",
+  "movie": "movie.mp4"
+}
