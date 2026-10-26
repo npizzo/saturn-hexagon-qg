@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "title": "2017 jet\u2013cyclone comparison: QG formation",
+  "description": "Six regularized QG analogues of Rostami, Zeitlin & Spiga (2017): jet only, reference cyclone and stronger cyclone, each seeded with m=6 or random-phase modes 2\u20138. Resting deep layer; deformation radius 3,200 km; convection off; 36.17 Earth days. The reference and stronger cores exceed the controlled small-Rossby-number regime. These use a smoothed core and annular streamfunction seeds, rather than the paper\u2019s full shallow-water dynamics and eigenfunctions. Completion or a strong sixfold signal does not establish a stable connected hexagonal jet, convergence, or agreement with the observed drift.",
+  "runs": [
+    {
+      "name": "formation__jet_only_m6",
+      "run_id": "formation-jet-only-m6-0e5f55a0",
+      "page": "runs/formation-jet-only-m6-0e5f55a0/index.html",
+      "summary": "runs/formation-jet-only-m6-0e5f55a0/summary.json",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "input_config_sha256": "0e5f55a00e10fba142ff111b3d91aa62beb49ac59341a5995546f4f87db55dea",
+      "snapshot_count": 64,
+      "end_s": 3125000.0
+    },
+    {
+      "name": "formation__jet_only_bb2to8_s42",
+      "run_id": "formation-jet-only-bb2to8-s42-9f9138e6",
+      "page": "runs/formation-jet-only-bb2to8-s42-9f9138e6/index.html",
+      "summary": "runs/formation-jet-only-bb2to8-s42-9f9138e6/summary.json",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "input_config_sha256": "9f9138e6a65d8a3d1dab01fc1c67939eceff7298f2452a9731fc71974cc38577",
+      "snapshot_count": 64,
+      "end_s": 3125000.0
+    },
+    {
+      "name": "formation__reference_m6",
+      "run_id": "formation-reference-m6-ae607935",
+      "page": "runs/formation-reference-m6-ae607935/index.html",
+      "summary": "runs/formation-reference-m6-ae607935/summary.json",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "input_config_sha256": "ae607935cdce4b9e2c44ffe32891f9379f71f1e6c038df8874a7437b0ababc16",
+      "snapshot_count": 64,
+      "end_s": 3125000.0
+    },
+    {
+      "name": "formation__reference_bb2to8_s42",
+      "run_id": "formation-reference-bb2to8-s42-2cbfbdd9",
+      "page": "runs/formation-reference-bb2to8-s42-2cbfbdd9/index.html",
+      "summary": "runs/formation-reference-bb2to8-s42-2cbfbdd9/summary.json",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "input_config_sha256": "2cbfbdd9053c03d2dc86315ae91b688e21d809ab88cdf04006654b6a465aa027",
+      "snapshot_count": 64,
+      "end_s": 3125000.0
+    },
+    {
+      "name": "formation__strong_core_m6",
+      "run_id": "formation-strong-core-m6-3258e790",
+      "page": "runs/formation-strong-core-m6-3258e790/index.html",
+      "summary": "runs/formation-strong-core-m6-3258e790/summary.json",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "input_config_sha256": "3258e790767086afeafe2e687de0b0f72d23c02872cf35a9adf673fb3c9c3066",
+      "snapshot_count": 64,
+      "end_s": 3125000.0
+    },
+    {
+      "name": "formation__strong_core_bb2to8_s42",
+      "run_id": "formation-strong-core-bb2to8-s42-e05d29b7",
+      "page": "runs/formation-strong-core-bb2to8-s42-e05d29b7/index.html",
+      "summary": "runs/formation-strong-core-bb2to8-s42-e05d29b7/summary.json",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "input_config_sha256": "e05d29b779d782fc3490e98cacbce67a63cc83cb009d42e9a696bd9294988fa4",
+      "snapshot_count": 64,
+      "end_s": 3125000.0
+    }
+  ],
+  "shared_color_limits": {
+    "relative_vorticity_s_inverse": [
+      -0.0007275719379073528,
+      0.0007275719379073528
+    ],
+    "speed_m_s": [
+      0.0,
+      211.28260516342226
+    ],
+    "mode_display_floor_m": 10.0,
+    "mode_amplitude_max_m": 1816506.9513194773,
+    "scope": "all supplied runs; field limits use all saved science-disk frames, mode limit uses all diagnostics"
+  },
+  "media_policy": "Actual saved frames only; optional MP4 uses equal display durations with no temporal interpolation."
+}
