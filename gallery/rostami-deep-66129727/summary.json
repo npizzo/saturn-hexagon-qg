@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "title": "Prescribed deep flow: four long integrations",
+  "description": "Four 1024\u00b2 QG integrations compare a half-strength deep jet, a full-strength deep jet, a deep central cyclone, and their combination. Each starts from the same upper-layer flow with broadband modes 2\u20138 (seed 42), deformation radius 3200 km, and convection off, and runs for 3,125,000 s (36.17 Earth days). Compare with the reference broadband run in the formation collection. These are regularized QG analogues of the 2017 shallow-water setup; completion does not establish stability or agreement with Saturn\u2019s observed propagation speed.",
+  "runs": [
+    {
+      "name": "deep__half_jet_bb2to8_s42",
+      "run_id": "deep-half-jet-bb2to8-s42-60249ce7",
+      "page": "runs/deep-half-jet-bb2to8-s42-60249ce7/index.html",
+      "summary": "runs/deep-half-jet-bb2to8-s42-60249ce7/summary.json",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "input_config_sha256": "60249ce7d9afe8cbd8647888270238cfc4e8cb4bd61f1b2c2518ac5448a812f9",
+      "snapshot_count": 64,
+      "end_s": 3125000.0
+    },
+    {
+      "name": "deep__full_jet_bb2to8_s42",
+      "run_id": "deep-full-jet-bb2to8-s42-f60ace21",
+      "page": "runs/deep-full-jet-bb2to8-s42-f60ace21/index.html",
+      "summary": "runs/deep-full-jet-bb2to8-s42-f60ace21/summary.json",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "input_config_sha256": "f60ace21685623e896ad09a437d8776d55aeb0fd9fe600ac8a3d10ea926a0cf2",
+      "snapshot_count": 64,
+      "end_s": 3125000.0
+    },
+    {
+      "name": "deep__full_core_bb2to8_s42",
+      "run_id": "deep-full-core-bb2to8-s42-f25877d2",
+      "page": "runs/deep-full-core-bb2to8-s42-f25877d2/index.html",
+      "summary": "runs/deep-full-core-bb2to8-s42-f25877d2/summary.json",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "input_config_sha256": "f25877d2f16a7490344f08f55dcb04c424573033bd2c63f93be5ab048dda4afb",
+      "snapshot_count": 64,
+      "end_s": 3125000.0
+    },
+    {
+      "name": "deep__full_both_bb2to8_s42",
+      "run_id": "deep-full-both-bb2to8-s42-c108ea19",
+      "page": "runs/deep-full-both-bb2to8-s42-c108ea19/index.html",
+      "summary": "runs/deep-full-both-bb2to8-s42-c108ea19/summary.json",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "input_config_sha256": "c108ea198753edeae52d5be3cbd307a716abe74cd6979e2d7afe359f549ffa4e",
+      "snapshot_count": 64,
+      "end_s": 3125000.0
+    }
+  ],
+  "shared_color_limits": {
+    "relative_vorticity_s_inverse": [
+      -0.0005452264700262397,
+      0.0005452264700262397
+    ],
+    "speed_m_s": [
+      0.0,
+      162.761749095351
+    ],
+    "mode_display_floor_m": 10.0,
+    "mode_amplitude_max_m": 2376339.525778328,
+    "scope": "all supplied runs; field limits use all saved science-disk frames, mode limit uses all diagnostics"
+  },
+  "media_policy": "Actual saved frames only; optional MP4 uses equal display durations with no temporal interpolation."
+}
