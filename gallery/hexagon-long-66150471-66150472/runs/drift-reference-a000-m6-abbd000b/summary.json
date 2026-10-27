@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "name": "drift__reference_a000_m6",
+  "run_id": "drift-reference-a000-m6-abbd000b",
+  "status": "completed",
+  "start_s": 0.0,
+  "end_s": 12500000.0,
+  "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+  "manifest_sha256": "d55feb3c66021f9ec2322d58d01188fe88009d329b0be0fd45123e50526a5838",
+  "source_verified": true,
+  "manifest_verified": true,
+  "input_config_sha256": "abbd000b36dd713f4f42b27d2ffc5499d7c87d0d02e3ea8ddd431ba88a252260",
+  "input_diagnostics_sha256": "7de150fa56307e4a3cbe080bc67ab095c248de4ad38b42663a4887b191fb2416",
+  "first_incomplete_tracker_time_s": 2770000.0,
+  "mode_numbers": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32
+  ],
+  "snapshot_count": 6,
+  "frames": [
+    {
+      "file": "snapshot_000000000.jld2",
+      "time_s": 0.0,
+      "sha256": "e576daeb7ecb2e4e57e9f3aa9ea324f55403ea02bd4196413974c4ede94cb7a5",
+      "image": "frame_000.png"
+    },
+    {
+      "file": "snapshot_000100000.jld2",
+      "time_s": 2500000.0,
+      "sha256": "84ba8056ab49b8f6b28105abcb3ed563af248df01b150e6be5da233c86502a1f",
+      "image": "frame_001.png"
+    },
+    {
+      "file": "snapshot_000200000.jld2",
+      "time_s": 5000000.0,
+      "sha256": "e8860fc227caf1440e0c912d8bb526b2d52e57208acae1dd3c811bd42cd8fdf1",
+      "image": "frame_002.png"
+    },
+    {
+      "file": "snapshot_000300000.jld2",
+      "time_s": 7500000.0,
+      "sha256": "feb1011cbcf9eac06e1e74958f31418a5206327605b26ccfb5e5701b8d405a24",
+      "image": "frame_003.png"
+    },
+    {
+      "file": "snapshot_000400000.jld2",
+      "time_s": 10000000.0,
+      "sha256": "691a05de7c93acc56a7b0b504d9d623d722a012700f22937c603af8228fa425d",
+      "image": "frame_004.png"
+    },
+    {
+      "file": "snapshot_000500000.jld2",
+      "time_s": 12500000.0,
+      "sha256": "0a2bc0e65dfd5dd6692ba8f423faef29682e0f7c555648812ae6ac75af2c58c3",
+      "image": "frame_005.png"
+    }
+  ],
+  "shared_color_limits": {
+    "relative_vorticity_s_inverse": [
+      -0.0005471920115864521,
+      0.0005471920115864521
+    ],
+    "speed_m_s": [
+      0,
+      157.748595887552
+    ],
+    "mode_display_floor_m": 10.0,
+    "mode_amplitude_max_m": 3057677.7118030624,
+    "scope": "Field scales use only the 54 selected saved states (six per run); mode plot scale uses all saved diagnostic times."
+  },
+  "field_definition": "Relative vorticity = s + psi / LD^2; speed = sqrt(u^2+v^2).",
+  "orientation": "x = r cos(theta), y = r sin(theta); origin lower; positive theta counterclockwise in this north-polar view.",
+  "display": "Fields block-averaged to at most 512 cells per side for rendering only; masked outside science radius.",
+  "phase_policy": "No drift fit or temporal phase unwrapping in this gallery.",
+  "interpretation": "Completion is not a stability certificate. An imposed mode is not evidence of spontaneous selection. Tracker gaps do not measure a physical lifetime.",
+  "public_config_sha256": "1b0ce9f17e8e89f774a83f0f82e6c09ac2f795a247a9845c70f3eb11f64f3f1a",
+  "available_snapshot_count": 126,
+  "selection_note": "Six actual saved states selected from 126; not a movie or a resolved trajectory.",
+  "movie": null
+}

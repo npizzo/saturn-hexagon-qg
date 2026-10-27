@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "title": "Hexagon long runs: coarse preview",
+  "description": "Coarse preview of nine completed 1.5-layer QG integrations spanning 12,500,000 seconds (144.68 Earth days). Six actual saved states per run are shown, selected from 126 available snapshots; no intermediate motion is reconstructed. Five cases vary deep-jet strength at a 3,200-km deformation radius; four compare 2,400 and 4,000 km with resting or matched deep jets. Initial upper winds and planetary rotation are fixed, with the same small sixfold seed and convection off. No pattern-speed fit is included. No pattern drift is fitted in this gallery. These are exploratory QG analogues of the 2017 shallow-water setup; the model frame has not been registered to Saturn\u2019s System III.",
+  "runs": [
+    {
+      "name": "drift__reference_a000_m6",
+      "run_id": "drift-reference-a000-m6-abbd000b",
+      "page": "runs/drift-reference-a000-m6-abbd000b/index.html",
+      "summary": "runs/drift-reference-a000-m6-abbd000b/summary.json",
+      "input_config_sha256": "abbd000b36dd713f4f42b27d2ffc5499d7c87d0d02e3ea8ddd431ba88a252260",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "snapshot_count": 6,
+      "available_snapshot_count": 126,
+      "end_s": 12500000
+    },
+    {
+      "name": "drift__reference_a050_m6",
+      "run_id": "drift-reference-a050-m6-a99cc15e",
+      "page": "runs/drift-reference-a050-m6-a99cc15e/index.html",
+      "summary": "runs/drift-reference-a050-m6-a99cc15e/summary.json",
+      "input_config_sha256": "a99cc15e79f878509259ae5d8fd8b44e88f3e6fdc53bfeafe27a133da4d34a94",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "snapshot_count": 6,
+      "available_snapshot_count": 126,
+      "end_s": 12500000
+    },
+    {
+      "name": "drift__reference_a100_m6",
+      "run_id": "drift-reference-a100-m6-e21d19e8",
+      "page": "runs/drift-reference-a100-m6-e21d19e8/index.html",
+      "summary": "runs/drift-reference-a100-m6-e21d19e8/summary.json",
+      "input_config_sha256": "e21d19e88da5b9f12d97a38149d000df391da0fa6c10346a878ff08c96ecc9d3",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "snapshot_count": 6,
+      "available_snapshot_count": 126,
+      "end_s": 12500000
+    },
+    {
+      "name": "drift__reference_a150_m6",
+      "run_id": "drift-reference-a150-m6-0ce6c271",
+      "page": "runs/drift-reference-a150-m6-0ce6c271/index.html",
+      "summary": "runs/drift-reference-a150-m6-0ce6c271/summary.json",
+      "input_config_sha256": "0ce6c271f1db7e5b5bfb948114e17a649766160ab920db1931009d62f302657f",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "snapshot_count": 6,
+      "available_snapshot_count": 126,
+      "end_s": 12500000
+    },
+    {
+      "name": "drift__reference_a200_m6",
+      "run_id": "drift-reference-a200-m6-e8c9309c",
+      "page": "runs/drift-reference-a200-m6-e8c9309c/index.html",
+      "summary": "runs/drift-reference-a200-m6-e8c9309c/summary.json",
+      "input_config_sha256": "e8c9309cb2d0ca083c0adac7956114698cb761d8f63bf46b2fef50ac18db51bc",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "snapshot_count": 6,
+      "available_snapshot_count": 126,
+      "end_s": 12500000
+    },
+    {
+      "name": "deformation__ld2400_a000_m6",
+      "run_id": "deformation-ld2400-a000-m6-a08bee82",
+      "page": "runs/deformation-ld2400-a000-m6-a08bee82/index.html",
+      "summary": "runs/deformation-ld2400-a000-m6-a08bee82/summary.json",
+      "input_config_sha256": "a08bee821dc22485664cb7364ae27e6d668035b0180fe4b690697a1c9245472b",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "snapshot_count": 6,
+      "available_snapshot_count": 126,
+      "end_s": 12500000
+    },
+    {
+      "name": "deformation__ld2400_a100_m6",
+      "run_id": "deformation-ld2400-a100-m6-93b8a07d",
+      "page": "runs/deformation-ld2400-a100-m6-93b8a07d/index.html",
+      "summary": "runs/deformation-ld2400-a100-m6-93b8a07d/summary.json",
+      "input_config_sha256": "93b8a07d181d1f98f5befdfa902a3e013c56ca11e630c1780bd9004b0d529d27",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "snapshot_count": 6,
+      "available_snapshot_count": 126,
+      "end_s": 12500000
+    },
+    {
+      "name": "deformation__ld4000_a000_m6",
+      "run_id": "deformation-ld4000-a000-m6-e8f2075e",
+      "page": "runs/deformation-ld4000-a000-m6-e8f2075e/index.html",
+      "summary": "runs/deformation-ld4000-a000-m6-e8f2075e/summary.json",
+      "input_config_sha256": "e8f2075eaa7575e51d802251370db88bca7b202f4e9254b1ed461e95155178a7",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "snapshot_count": 6,
+      "available_snapshot_count": 126,
+      "end_s": 12500000
+    },
+    {
+      "name": "deformation__ld4000_a100_m6",
+      "run_id": "deformation-ld4000-a100-m6-bd9ddf8c",
+      "page": "runs/deformation-ld4000-a100-m6-bd9ddf8c/index.html",
+      "summary": "runs/deformation-ld4000-a100-m6-bd9ddf8c/summary.json",
+      "input_config_sha256": "bd9ddf8cfefe228688b9e1ca1696ee51496ab0d7514ed3db17f340598aed9233",
+      "source_sha256": "1f5879726b47cab4166051adc0e63edbe1245efacb31fac7ab2bf4b329284797",
+      "snapshot_count": 6,
+      "available_snapshot_count": 126,
+      "end_s": 12500000
+    }
+  ],
+  "shared_color_limits": {
+    "relative_vorticity_s_inverse": [
+      -0.0005471920115864521,
+      0.0005471920115864521
+    ],
+    "speed_m_s": [
+      0,
+      157.748595887552
+    ],
+    "mode_display_floor_m": 10.0,
+    "mode_amplitude_max_m": 3057677.7118030624,
+    "scope": "Field scales use only the 54 selected saved states (six per run); mode plot scale uses all saved diagnostic times."
+  },
+  "media_policy": "Six actual saved states per run; no movie, temporal interpolation, or fitted drift."
+}
