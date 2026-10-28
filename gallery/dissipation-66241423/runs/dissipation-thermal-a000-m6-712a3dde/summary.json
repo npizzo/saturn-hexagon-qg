@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "name": "dissipation__thermal_a000_m6",
+  "run_id": "dissipation-thermal-a000-m6-712a3dde",
+  "status": "completed",
+  "start_s": 0.0,
+  "end_s": 12500000.0,
+  "source_sha256": "412a7af44c6891ac25a01b5e492060b108459188d002189aec33d5f511eaab94",
+  "manifest_sha256": "d55feb3c66021f9ec2322d58d01188fe88009d329b0be0fd45123e50526a5838",
+  "source_verified": true,
+  "manifest_verified": true,
+  "input_config_sha256": "712a3dde4fa1c4e11b826ddcfcfd065fd68de0958df07907fa1815a00612456f",
+  "input_diagnostics_sha256": "363fb201615c708f45bc709bd32108967ef8de4abdf178fa7d3fa523ee5f93b6",
+  "first_incomplete_tracker_time_s": 1418000.0,
+  "mode_numbers": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32
+  ],
+  "snapshot_count": 6,
+  "frames": [
+    {
+      "file": "snapshot_000000000.jld2",
+      "time_s": 0.0,
+      "sha256": "e576daeb7ecb2e4e57e9f3aa9ea324f55403ea02bd4196413974c4ede94cb7a5",
+      "image": "frame_000.png"
+    },
+    {
+      "file": "snapshot_000100000.jld2",
+      "time_s": 2500000.0,
+      "sha256": "e4bef4e6938a0f5dfc2dbf664319927835073a343f13ac2d0406c009289f1136",
+      "image": "frame_001.png"
+    },
+    {
+      "file": "snapshot_000200000.jld2",
+      "time_s": 5000000.0,
+      "sha256": "3330023116bdd0ac009deb4cf9933185147a10027595d54c035c7c9dd01843ec",
+      "image": "frame_002.png"
+    },
+    {
+      "file": "snapshot_000300000.jld2",
+      "time_s": 7500000.0,
+      "sha256": "c60183c5fdcc2b6c4884f91a520c8c5308d1156e8060313240b51d8677f47d64",
+      "image": "frame_003.png"
+    },
+    {
+      "file": "snapshot_000400000.jld2",
+      "time_s": 10000000.0,
+      "sha256": "652c1359b54595dc9e308ff064590324b2285419b33376731ee1e881e35db65d",
+      "image": "frame_004.png"
+    },
+    {
+      "file": "snapshot_000500000.jld2",
+      "time_s": 12500000.0,
+      "sha256": "91790df396ad639b21ae29da837477778c8b14e856b6d4733f4c1cfefef29921",
+      "image": "frame_005.png"
+    }
+  ],
+  "shared_color_limits": {
+    "relative_vorticity_s_inverse": [
+      -0.0005446248496909427,
+      0.0005446248496909427
+    ],
+    "speed_m_s": [
+      0,
+      153.59970491370078
+    ],
+    "mode_display_floor_m": 10.0,
+    "mode_amplitude_max_m": 3704077.3903698465,
+    "scope": "Field scales use the 24 selected saved states (six per run); the mode plot scale uses all saved diagnostic times."
+  },
+  "field_definition": "Relative vorticity = s + psi / LD^2; speed = sqrt(u^2+v^2).",
+  "orientation": "x = r cos(theta), y = r sin(theta); origin lower; positive theta counterclockwise in this north-polar view.",
+  "display": "Fields block-averaged to at most 512 cells per side for rendering only; masked outside science radius.",
+  "phase_policy": "No drift fit or temporal phase unwrapping in this gallery.",
+  "interpretation": "Completion is not a stability certificate. An imposed mode is not evidence of spontaneous selection. Tracker gaps do not measure a physical lifetime.",
+  "public_config_sha256": "fc01cc4ed5bf1efc2afa454c187f68abf105b3c15e84a5030d275dcb86cf304b",
+  "available_snapshot_count": 26,
+  "selection_note": "Six actual saved states selected from 26; not a movie or a resolved trajectory.",
+  "movie": null,
+  "damping": {
+    "momentum_drag_rate_s": 0.0,
+    "thermal_relaxation_rate_s": 8.298471185570657e-07,
+    "thermal_equilibrium": "uniform_thickness"
+  },
+  "matched_amplitude_decay_time_days": 100.0,
+  "damping_match_scope": "Only at kstar^2=(1/jet_width)^2+(6/jet_radius)^2; not equal damping at every scale or a measured Saturn cooling time."
+}

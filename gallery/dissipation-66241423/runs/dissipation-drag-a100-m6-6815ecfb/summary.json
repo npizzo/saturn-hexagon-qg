@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "name": "dissipation__drag_a100_m6",
+  "run_id": "dissipation-drag-a100-m6-6815ecfb",
+  "status": "completed",
+  "start_s": 0.0,
+  "end_s": 12500000.0,
+  "source_sha256": "412a7af44c6891ac25a01b5e492060b108459188d002189aec33d5f511eaab94",
+  "manifest_sha256": "d55feb3c66021f9ec2322d58d01188fe88009d329b0be0fd45123e50526a5838",
+  "source_verified": true,
+  "manifest_verified": true,
+  "input_config_sha256": "6815ecfb54c4a99ac75ef06c3b5af92a50f3f0f2217c6a159224c8762c7ef64b",
+  "input_diagnostics_sha256": "fc434dbbd30b2501d71aa75010c2575dc76d24cae6641762cc3da4afb141819c",
+  "first_incomplete_tracker_time_s": 538000.0,
+  "mode_numbers": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32
+  ],
+  "snapshot_count": 6,
+  "frames": [
+    {
+      "file": "snapshot_000000000.jld2",
+      "time_s": 0.0,
+      "sha256": "b4cd6909b23accd4bae6f30bc0f0faa1af43639948a16682f19e68ee9c62c3d5",
+      "image": "frame_000.png"
+    },
+    {
+      "file": "snapshot_000100000.jld2",
+      "time_s": 2500000.0,
+      "sha256": "3532419720df4f9986913cc5e8f10730ff75913a80510676ed964ca442653cb0",
+      "image": "frame_001.png"
+    },
+    {
+      "file": "snapshot_000200000.jld2",
+      "time_s": 5000000.0,
+      "sha256": "0cbcfa2bc6c94df5b29ec69872dbff92fb30ac89a7a698853e9609768c1feb84",
+      "image": "frame_002.png"
+    },
+    {
+      "file": "snapshot_000300000.jld2",
+      "time_s": 7500000.0,
+      "sha256": "050d6024defc6f7bb3c525e2e5920f0b0b33241735df0877a31ffa3e6e4b15e3",
+      "image": "frame_003.png"
+    },
+    {
+      "file": "snapshot_000400000.jld2",
+      "time_s": 10000000.0,
+      "sha256": "58d70caca87cd41b229af1b1becf082247093872bfb2387230b2a3f203af8d84",
+      "image": "frame_004.png"
+    },
+    {
+      "file": "snapshot_000500000.jld2",
+      "time_s": 12500000.0,
+      "sha256": "da787c36f78f4604f8aac2a11af4594d1fb98e240a0ac774371276723c8854bc",
+      "image": "frame_005.png"
+    }
+  ],
+  "shared_color_limits": {
+    "relative_vorticity_s_inverse": [
+      -0.0005446248496909427,
+      0.0005446248496909427
+    ],
+    "speed_m_s": [
+      0,
+      153.59970491370078
+    ],
+    "mode_display_floor_m": 10.0,
+    "mode_amplitude_max_m": 3704077.3903698465,
+    "scope": "Field scales use the 24 selected saved states (six per run); the mode plot scale uses all saved diagnostic times."
+  },
+  "field_definition": "Relative vorticity = s + psi / LD^2; speed = sqrt(u^2+v^2).",
+  "orientation": "x = r cos(theta), y = r sin(theta); origin lower; positive theta counterclockwise in this north-polar view.",
+  "display": "Fields block-averaged to at most 512 cells per side for rendering only; masked outside science radius.",
+  "phase_policy": "No drift fit or temporal phase unwrapping in this gallery.",
+  "interpretation": "Completion is not a stability certificate. An imposed mode is not evidence of spontaneous selection. Tracker gaps do not measure a physical lifetime.",
+  "public_config_sha256": "3e91a7ed0264d26c4d31b83ecf8c09208cbc7149c29f10e23756330adc819ff3",
+  "available_snapshot_count": 26,
+  "selection_note": "Six actual saved states selected from 26; not a movie or a resolved trajectory.",
+  "movie": null,
+  "damping": {
+    "momentum_drag_rate_s": 1.3449973727593334e-07,
+    "thermal_relaxation_rate_s": 0.0,
+    "thermal_equilibrium": "uniform_thickness"
+  },
+  "matched_amplitude_decay_time_days": 100.0,
+  "damping_match_scope": "Only at kstar^2=(1/jet_width)^2+(6/jet_radius)^2; not equal damping at every scale or a measured Saturn cooling time."
+}

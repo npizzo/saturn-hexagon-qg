@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "title": "Momentum drag or thickness relaxation?",
+  "description": "Four completed 1.5-layer QG runs compare momentum drag with layer-thickness relaxation, each with resting deep flow or a prescribed deep jet matching the initial upper jet component. All runs share the initial upper winds, central cyclone, small sixfold seed, 3,200-km deformation radius and planetary rotation; convection is off. Each spans 144.68 Earth days. This coarse preview shows six actual saved states selected from 26 per run, with shared field scales and diagnostics over the full integration. No pattern-speed fit is included.",
+  "runs": [
+    {
+      "name": "dissipation__drag_a000_m6",
+      "run_id": "dissipation-drag-a000-m6-4bd61e6b",
+      "page": "runs/dissipation-drag-a000-m6-4bd61e6b/index.html",
+      "summary": "runs/dissipation-drag-a000-m6-4bd61e6b/summary.json",
+      "input_config_sha256": "4bd61e6b269e77b48cff5ed87d9f2c22237d4cb5c597e8067162c61acb73e619",
+      "source_sha256": "412a7af44c6891ac25a01b5e492060b108459188d002189aec33d5f511eaab94",
+      "snapshot_count": 6,
+      "available_snapshot_count": 26,
+      "end_s": 12500000
+    },
+    {
+      "name": "dissipation__drag_a100_m6",
+      "run_id": "dissipation-drag-a100-m6-6815ecfb",
+      "page": "runs/dissipation-drag-a100-m6-6815ecfb/index.html",
+      "summary": "runs/dissipation-drag-a100-m6-6815ecfb/summary.json",
+      "input_config_sha256": "6815ecfb54c4a99ac75ef06c3b5af92a50f3f0f2217c6a159224c8762c7ef64b",
+      "source_sha256": "412a7af44c6891ac25a01b5e492060b108459188d002189aec33d5f511eaab94",
+      "snapshot_count": 6,
+      "available_snapshot_count": 26,
+      "end_s": 12500000
+    },
+    {
+      "name": "dissipation__thermal_a000_m6",
+      "run_id": "dissipation-thermal-a000-m6-712a3dde",
+      "page": "runs/dissipation-thermal-a000-m6-712a3dde/index.html",
+      "summary": "runs/dissipation-thermal-a000-m6-712a3dde/summary.json",
+      "input_config_sha256": "712a3dde4fa1c4e11b826ddcfcfd065fd68de0958df07907fa1815a00612456f",
+      "source_sha256": "412a7af44c6891ac25a01b5e492060b108459188d002189aec33d5f511eaab94",
+      "snapshot_count": 6,
+      "available_snapshot_count": 26,
+      "end_s": 12500000
+    },
+    {
+      "name": "dissipation__thermal_a100_m6",
+      "run_id": "dissipation-thermal-a100-m6-a52c9dc3",
+      "page": "runs/dissipation-thermal-a100-m6-a52c9dc3/index.html",
+      "summary": "runs/dissipation-thermal-a100-m6-a52c9dc3/summary.json",
+      "input_config_sha256": "a52c9dc3097d3699bf5c91a0bce34f83413d7e1e992d718ba8323597be98fa0b",
+      "source_sha256": "412a7af44c6891ac25a01b5e492060b108459188d002189aec33d5f511eaab94",
+      "snapshot_count": 6,
+      "available_snapshot_count": 26,
+      "end_s": 12500000
+    }
+  ],
+  "shared_color_limits": {
+    "relative_vorticity_s_inverse": [
+      -0.0005446248496909427,
+      0.0005446248496909427
+    ],
+    "speed_m_s": [
+      0,
+      153.59970491370078
+    ],
+    "mode_display_floor_m": 10.0,
+    "mode_amplitude_max_m": 3704077.3903698465,
+    "scope": "Field scales use the 24 selected saved states (six per run); the mode plot scale uses all saved diagnostic times."
+  },
+  "media_policy": "Six actual saved states per run; no movie, temporal interpolation, or fitted drift."
+}
