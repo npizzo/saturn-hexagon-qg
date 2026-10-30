@@ -1,0 +1,469 @@
+{
+  "schema_version": 1,
+  "collection": "exterior-pv-66296701-66296702",
+  "generated_utc": "2026-10-30T00:52:49.559542+00:00",
+  "original_search_array": "66264876",
+  "refinement_job": "66296701",
+  "evolution_array": "66296702",
+  "publication_scope": "Derived figures and scalar diagnostics; raw fields retained privately.",
+  "phase_units": "Synthetic nondimensional model frame; not registered to Saturn System III.",
+  "lower_layer": "Flat and fixed",
+  "convection": false,
+  "physical_dissipation": false,
+  "initial_searches": [
+    {
+      "name": "rostami_exterior_050",
+      "background": "rostami2017",
+      "exterior_gradient_factor": 0.5,
+      "accepted_equilibrium": false,
+      "angular_speed": 0.372058503983527,
+      "optimization_grid": [
+        128,
+        192
+      ],
+      "shape_harmonics": 3,
+      "fine_normal_rms_fraction": 0.01909234058270286,
+      "fine_normal_max_fraction": 0.12622997195501215,
+      "grid_change_fraction": 0.0005883558094363782,
+      "mean_upper_wind_at_unit_radius": 0.9646874072540075
+    },
+    {
+      "name": "rostami_exterior_100",
+      "background": "rostami2017",
+      "exterior_gradient_factor": 1.0,
+      "accepted_equilibrium": false,
+      "angular_speed": 0.34970855218798474,
+      "optimization_grid": [
+        128,
+        192
+      ],
+      "shape_harmonics": 3,
+      "fine_normal_rms_fraction": 0.01725997651575781,
+      "fine_normal_max_fraction": 0.1155335100859648,
+      "grid_change_fraction": 0.0005969600122167692,
+      "mean_upper_wind_at_unit_radius": 0.947187852855261
+    },
+    {
+      "name": "rostami_exterior_150",
+      "background": "rostami2017",
+      "exterior_gradient_factor": 1.5,
+      "accepted_equilibrium": false,
+      "angular_speed": 0.3288232342579963,
+      "optimization_grid": [
+        128,
+        192
+      ],
+      "shape_harmonics": 3,
+      "fine_normal_rms_fraction": 0.01535474681253312,
+      "fine_normal_max_fraction": 0.1066522157702513,
+      "grid_change_fraction": 0.0006046816477847177,
+      "mean_upper_wind_at_unit_radius": 0.9297146216834673
+    },
+    {
+      "name": "ptolemaic_exterior_050",
+      "background": "ptolemaic2024_conditional",
+      "exterior_gradient_factor": 0.5,
+      "accepted_equilibrium": true,
+      "angular_speed": -0.0444140256383644,
+      "optimization_grid": [
+        128,
+        192
+      ],
+      "shape_harmonics": 3,
+      "fine_normal_rms_fraction": 0.0007433489104069342,
+      "fine_normal_max_fraction": 0.0039132245464523555,
+      "grid_change_fraction": 0.0012752096434536758,
+      "mean_upper_wind_at_unit_radius": -0.004345199567982218
+    },
+    {
+      "name": "ptolemaic_exterior_100",
+      "background": "ptolemaic2024_conditional",
+      "exterior_gradient_factor": 1.0,
+      "accepted_equilibrium": false,
+      "angular_speed": -0.03442311625443714,
+      "optimization_grid": [
+        128,
+        192
+      ],
+      "shape_harmonics": 3,
+      "fine_normal_rms_fraction": 0.002628626425700262,
+      "fine_normal_max_fraction": 0.013109008659248007,
+      "grid_change_fraction": 0.005243384755312285,
+      "mean_upper_wind_at_unit_radius": 0.016510810372826545
+    },
+    {
+      "name": "ptolemaic_exterior_150",
+      "background": "ptolemaic2024_conditional",
+      "exterior_gradient_factor": 1.5,
+      "accepted_equilibrium": true,
+      "angular_speed": -0.0012450695562852628,
+      "optimization_grid": [
+        128,
+        192
+      ],
+      "shape_harmonics": 3,
+      "fine_normal_rms_fraction": 0.0004868718082383385,
+      "fine_normal_max_fraction": 0.0018897217571198944,
+      "grid_change_fraction": 0.0006739942003575291,
+      "mean_upper_wind_at_unit_radius": 0.036899693218738774
+    }
+  ],
+  "refinement": [
+    {
+      "name": "grid256",
+      "background": "ptolemaic2024_conditional",
+      "exterior_gradient_factor": 1.5,
+      "accepted_equilibrium": true,
+      "angular_speed": -0.001367577850258937,
+      "optimization_grid": [
+        256,
+        384
+      ],
+      "shape_harmonics": 3,
+      "fine_normal_rms_fraction": 0.00016987586648612552,
+      "fine_normal_max_fraction": 0.0010148769542561126,
+      "grid_change_fraction": 0.00035254115176757274,
+      "mean_upper_wind_at_unit_radius": 0.036900732564977445
+    },
+    {
+      "name": "grid512",
+      "background": "ptolemaic2024_conditional",
+      "exterior_gradient_factor": 1.5,
+      "accepted_equilibrium": true,
+      "angular_speed": -0.0013635450988282044,
+      "optimization_grid": [
+        512,
+        768
+      ],
+      "shape_harmonics": 3,
+      "fine_normal_rms_fraction": 8.418193104675289e-05,
+      "fine_normal_max_fraction": 0.00048799742191816647,
+      "grid_change_fraction": 0.00017201835304866506,
+      "mean_upper_wind_at_unit_radius": 0.03689934842394591
+    },
+    {
+      "name": "harmonics5",
+      "background": "ptolemaic2024_conditional",
+      "exterior_gradient_factor": 1.5,
+      "accepted_equilibrium": true,
+      "angular_speed": -0.0013676458125606852,
+      "optimization_grid": [
+        256,
+        384
+      ],
+      "shape_harmonics": 5,
+      "fine_normal_rms_fraction": 0.0001999738253588765,
+      "fine_normal_max_fraction": 0.0010383981060047066,
+      "grid_change_fraction": 0.0003526142960402497,
+      "mean_upper_wind_at_unit_radius": 0.036900705686665106
+    },
+    {
+      "name": "pv33",
+      "background": "ptolemaic2024_conditional",
+      "exterior_gradient_factor": 1.5,
+      "accepted_equilibrium": false,
+      "angular_speed": -0.0029777695340518235,
+      "optimization_grid": [
+        256,
+        384
+      ],
+      "shape_harmonics": 5,
+      "fine_normal_rms_fraction": 0.006540115343513038,
+      "fine_normal_max_fraction": 0.09796280759175567,
+      "grid_change_fraction": 0.00037342609608818607,
+      "mean_upper_wind_at_unit_radius": 0.03297830552210377
+    }
+  ],
+  "selected_stage": "harmonics5",
+  "evolution": [
+    {
+      "case": "control",
+      "status": "EVOLUTION_COMPLETED",
+      "t_reached": 60.0,
+      "t_requested": 60.0,
+      "completed_requested_interval": true,
+      "gas_turnovers_reached": 0.35237578281671783,
+      "numerics": {
+        "nr": 256,
+        "ntheta": 384,
+        "galerkin_cutoff": 48,
+        "dt_max": 0.2,
+        "angular_cfl_factor": 0.4,
+        "timestep_scale": 1.0,
+        "actual_step_min": 0.017876321035629417,
+        "actual_step_max": 0.15476030658036283,
+        "initial_step_bound": 0.15476023497303149,
+        "integrator": "RK4",
+        "frame_speed": -0.0013676458125606852,
+        "geometry_certificate": "4x angular oversampling plus analytic Fourier Lipschitz bound"
+      },
+      "phase": {
+        "valid": true,
+        "frame_angular_speed": -0.0013676458125606852,
+        "phase_sampling_ok": true,
+        "sample_count": 417,
+        "sampling": "m6 coefficient saved every accepted step, independent of field snapshots",
+        "reason": "m6 amplitude must remain above25% of its initial value, sampled phase steps below0.75pi, and at least3samples are required",
+        "fitted_model_frame_angular_speed": -0.0013675495912221802,
+        "rotating_frame_drift": 9.622133850505842e-08,
+        "phase_fit_rms": 5.815818937445171e-07,
+        "first_half_model_speed": -0.0013675319883499713,
+        "second_half_model_speed": -0.0013676239299985496
+      },
+      "maximum_relative_invariant_excursions": {
+        "energy": 2.3739249380190788e-07,
+        "angular_impulse": 5.7083648047107565e-11,
+        "pv_integral": 0.0,
+        "enstrophy": 0.0
+      },
+      "maximum_invariant_excursions": {
+        "energy": 5.8513067641152716e-08,
+        "angular_impulse": 1.0543203643464949e-08,
+        "pv_integral": 0.0,
+        "enstrophy": 0.0
+      },
+      "maximum_relative_area_error": 3.451122701240795e-16,
+      "nonsixfold_initial": 2.80674447367291e-17,
+      "nonsixfold_final": 1.9577499510002188e-15,
+      "nonsixfold_peak": 1.9577499510002188e-15,
+      "nonsixfold_peak_time": 60.0,
+      "nonsixfold_peak_amplification": null,
+      "nonsixfold_final_amplification": null,
+      "phase_aligned_shape_change_final": 1.4743288605171021e-05,
+      "maximum_discarded_rhs_fraction": 0.809107595115916,
+      "maximum_absolute_discarded_rhs": 1.724101601419302e-05
+    },
+    {
+      "case": "perturbed",
+      "status": "EVOLUTION_COMPLETED",
+      "t_reached": 60.0,
+      "t_requested": 60.0,
+      "completed_requested_interval": true,
+      "gas_turnovers_reached": 0.35237578281671783,
+      "numerics": {
+        "nr": 256,
+        "ntheta": 384,
+        "galerkin_cutoff": 48,
+        "dt_max": 0.2,
+        "angular_cfl_factor": 0.4,
+        "timestep_scale": 1.0,
+        "actual_step_min": 0.01917232682792469,
+        "actual_step_max": 0.15465230609767291,
+        "initial_step_bound": 0.15465230609767291,
+        "integrator": "RK4",
+        "frame_speed": -0.0013676458125606852,
+        "geometry_certificate": "4x angular oversampling plus analytic Fourier Lipschitz bound"
+      },
+      "phase": {
+        "valid": true,
+        "frame_angular_speed": -0.0013676458125606852,
+        "phase_sampling_ok": true,
+        "sample_count": 417,
+        "sampling": "m6 coefficient saved every accepted step, independent of field snapshots",
+        "reason": "m6 amplitude must remain above25% of its initial value, sampled phase steps below0.75pi, and at least3samples are required",
+        "fitted_model_frame_angular_speed": -0.0013675435824813227,
+        "rotating_frame_drift": 1.0223007936257471e-07,
+        "phase_fit_rms": 5.935984645902605e-07,
+        "first_half_model_speed": -0.0013675371159510528,
+        "second_half_model_speed": -0.0013676125744589607
+      },
+      "maximum_relative_invariant_excursions": {
+        "energy": 2.3327585751286348e-07,
+        "angular_impulse": 6.767030454050648e-11,
+        "pv_integral": 1.7021647737062962e-16,
+        "enstrophy": 2.67790571017464e-16
+      },
+      "maximum_invariant_excursions": {
+        "energy": 5.749839068758256e-08,
+        "angular_impulse": 1.2498531987148453e-08,
+        "pv_integral": 1.4210854715202004e-14,
+        "enstrophy": 5.684341886080802e-14
+      },
+      "maximum_relative_area_error": 5.602773913706816e-16,
+      "nonsixfold_initial": 0.0001200644782571148,
+      "nonsixfold_final": 0.00043562208371861216,
+      "nonsixfold_peak": 0.0006070790642567831,
+      "nonsixfold_peak_time": 37.5,
+      "nonsixfold_peak_amplification": 5.056275370278459,
+      "nonsixfold_final_amplification": 3.628234512340439,
+      "phase_aligned_shape_change_final": 0.0004580667688325619,
+      "maximum_discarded_rhs_fraction": 0.7432395588844953,
+      "maximum_absolute_discarded_rhs": 1.7243672437136217e-05
+    },
+    {
+      "case": "halfdt",
+      "status": "EVOLUTION_COMPLETED",
+      "t_reached": 60.0,
+      "t_requested": 60.0,
+      "completed_requested_interval": true,
+      "gas_turnovers_reached": 0.35237578281671783,
+      "numerics": {
+        "nr": 256,
+        "ntheta": 384,
+        "galerkin_cutoff": 48,
+        "dt_max": 0.2,
+        "angular_cfl_factor": 0.4,
+        "timestep_scale": 0.5,
+        "actual_step_min": 0.019187908579958002,
+        "actual_step_max": 0.07732615304883646,
+        "initial_step_bound": 0.07732615304883646,
+        "integrator": "RK4",
+        "frame_speed": -0.0013676458125606852,
+        "geometry_certificate": "4x angular oversampling plus analytic Fourier Lipschitz bound"
+      },
+      "phase": {
+        "valid": true,
+        "frame_angular_speed": -0.0013676458125606852,
+        "phase_sampling_ok": true,
+        "sample_count": 801,
+        "sampling": "m6 coefficient saved every accepted step, independent of field snapshots",
+        "reason": "m6 amplitude must remain above25% of its initial value, sampled phase steps below0.75pi, and at least3samples are required",
+        "fitted_model_frame_angular_speed": -0.001367543353169651,
+        "rotating_frame_drift": 1.0245939103411247e-07,
+        "phase_fit_rms": 5.901608802908898e-07,
+        "first_half_model_speed": -0.0013675372572204405,
+        "second_half_model_speed": -0.0013676120933280166
+      },
+      "maximum_relative_invariant_excursions": {
+        "energy": 2.332790638768672e-07,
+        "angular_impulse": 6.766291817903096e-11,
+        "pv_integral": 1.7021647737062962e-16,
+        "enstrophy": 2.67790571017464e-16
+      },
+      "maximum_invariant_excursions": {
+        "energy": 5.7499180999842636e-08,
+        "angular_impulse": 1.2497167745095794e-08,
+        "pv_integral": 1.4210854715202004e-14,
+        "enstrophy": 5.684341886080802e-14
+      },
+      "maximum_relative_area_error": 5.602773913706816e-16,
+      "nonsixfold_initial": 0.0001200644782571148,
+      "nonsixfold_final": 0.00043562207272226027,
+      "nonsixfold_peak": 0.0006070790552115276,
+      "nonsixfold_peak_time": 37.5,
+      "nonsixfold_peak_amplification": 5.056275294941809,
+      "nonsixfold_final_amplification": 3.6282344207533845,
+      "phase_aligned_shape_change_final": 0.00045806694092416554,
+      "maximum_discarded_rhs_fraction": 0.7423651726114993,
+      "maximum_absolute_discarded_rhs": 1.724360903025813e-05
+    },
+    {
+      "case": "fine",
+      "status": "EVOLUTION_COMPLETED",
+      "t_reached": 60.0,
+      "t_requested": 60.0,
+      "completed_requested_interval": true,
+      "gas_turnovers_reached": 0.35237578281671783,
+      "numerics": {
+        "nr": 512,
+        "ntheta": 768,
+        "galerkin_cutoff": 72,
+        "dt_max": 0.2,
+        "angular_cfl_factor": 0.4,
+        "timestep_scale": 1.0,
+        "actual_step_min": 0.020623864625732402,
+        "actual_step_max": 0.10302089640968157,
+        "initial_step_bound": 0.10302089640968157,
+        "integrator": "RK4",
+        "frame_speed": -0.0013676458125606852,
+        "geometry_certificate": "4x angular oversampling plus analytic Fourier Lipschitz bound"
+      },
+      "phase": {
+        "valid": true,
+        "frame_angular_speed": -0.0013676458125606852,
+        "phase_sampling_ok": true,
+        "sample_count": 609,
+        "sampling": "m6 coefficient saved every accepted step, independent of field snapshots",
+        "reason": "m6 amplitude must remain above25% of its initial value, sampled phase steps below0.75pi, and at least3samples are required",
+        "fitted_model_frame_angular_speed": -0.0013631120280456792,
+        "rotating_frame_drift": 4.533784515006066e-06,
+        "phase_fit_rms": 8.779498881985902e-05,
+        "first_half_model_speed": -0.001374530575726719,
+        "second_half_model_speed": -0.0013580852209394239
+      },
+      "maximum_relative_invariant_excursions": {
+        "energy": 6.114104524446792e-08,
+        "angular_impulse": 2.594394837613461e-10,
+        "pv_integral": 1.7021647737062965e-16,
+        "enstrophy": 5.355811420349282e-16
+      },
+      "maximum_invariant_excursions": {
+        "energy": 1.5070014264262355e-08,
+        "angular_impulse": 4.791780838786508e-08,
+        "pv_integral": 1.4210854715202004e-14,
+        "enstrophy": 1.1368683772161603e-13
+      },
+      "maximum_relative_area_error": 3.9266107178561936e-16,
+      "nonsixfold_initial": 0.00012006447825711526,
+      "nonsixfold_final": 0.00043685572540214855,
+      "nonsixfold_peak": 0.0006051913020468531,
+      "nonsixfold_peak_time": 37.5,
+      "nonsixfold_peak_amplification": 5.04055246674083,
+      "nonsixfold_final_amplification": 3.638509338845685,
+      "phase_aligned_shape_change_final": 0.0004714740893758239,
+      "maximum_discarded_rhs_fraction": 0.6018226173304855,
+      "maximum_absolute_discarded_rhs": 1.0445190394423015e-05
+    }
+  ],
+  "evolution_numerical_validation_passed": true,
+  "numerical_validation_tests": {
+    "solid_rotation_time_order": true,
+    "coupled_circular_pv": true,
+    "coupled_kirchhoff_evolution": true,
+    "geometry_and_kinematics": true
+  },
+  "source_manifest_sha256": {
+    "01": "381c2654f08cd9fc83d67767b292c528831909950c1d4ba5ecfccae9df3e8d9e",
+    "02": "fc453c34cfc42fd8786b094918b3512e2b41c8e64550eac71f9cd9102ed88f26"
+  },
+  "environment_lock_sha256": "145892f92d5a1b31625086b07d67050a81965cf1f0861c139c8fc444f4fc7bc1",
+  "scheduler": {
+    "refinement": [
+      {
+        "job_id": "66296701",
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed": "00:02:14"
+      }
+    ],
+    "evolution": [
+      {
+        "job_id": "66296702_1",
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed": "00:00:30"
+      },
+      {
+        "job_id": "66296702_2",
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed": "00:00:19"
+      },
+      {
+        "job_id": "66296702_3",
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed": "00:00:56"
+      },
+      {
+        "job_id": "66296702_4",
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed": "00:01:30"
+      }
+    ]
+  },
+  "limitations": [
+    "16-interface candidate only; smooth-PV convergence remains unresolved.",
+    "Short evolution does not establish long-term stability or emergence.",
+    "Global ambient PV changes can also change the upper winds.",
+    "Synthetic phase speed is not an observed Saturn drift match."
+  ],
+  "figures": [
+    "initial-screen.png",
+    "refinement.png",
+    "candidate-contours.png",
+    "evolution-diagnostics.png",
+    "evolution-contours.png"
+  ]
+}
